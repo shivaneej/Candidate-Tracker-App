@@ -14,9 +14,8 @@ import { InterviewFormComponent } from './interview-form/interview-form.componen
 import { UsersComponent } from './users/users.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { InterviewsComponent } from './interviews/interviews.component';
-import { MaterialComponentsModule } from './material-components.module';
-
-
+import { MaterialComponentsModule } from './material-components/material-components.module';
+import { DataTableComponent } from './data-table/data-table.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +28,8 @@ import { MaterialComponentsModule } from './material-components.module';
     InterviewFormComponent,
     UsersComponent,
     SidenavComponent,
-    InterviewsComponent
+    InterviewsComponent,
+    DataTableComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +37,7 @@ import { MaterialComponentsModule } from './material-components.module';
     MaterialComponentsModule,
     RouterModule.forRoot([
       { path: '', component: DashboardComponent },
+      { path: 'dashboard', component: DashboardComponent },
       { path: 'login', component: LoginComponent },
       { path: 'users', component: UsersComponent },
       { path: 'candidates', component: CandidatesComponent },

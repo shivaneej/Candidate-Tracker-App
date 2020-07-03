@@ -19,7 +19,7 @@ export class SidenavComponent implements OnDestroy {
     {
       displayName: 'Dashboard',
       iconName: 'dashboard',
-      route: '',
+      route: '/dashboard',
       endOfSection: false
     },
     {
@@ -55,7 +55,7 @@ export class SidenavComponent implements OnDestroy {
     {
       displayName: 'Logout',
       iconName: 'exit_to_app',
-      route: ''
+      route: '/logout'
     }
 
   ];

@@ -9,11 +9,22 @@
     <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
       <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" autosize>
         <mat-nav-list>
-            <a *ngFor="let item of navItems" mat-list-item class="menu-list-item" routerLink="{{ item.route }}" >
-              <mat-icon class="route-icon">{{item.iconName}}</mat-icon>
-              <span>{{item.displayName}}</span>
-              <mat-divider [inset]="true" *ngIf="item.endOfSection"></mat-divider>
-            </a>
+          <mat-card mat-list-item class="example-card">
+            <mat-card-header>
+              <div mat-card-avatar class="example-header-image"></div>
+              <mat-card-title>Name</mat-card-title>
+              <mat-card-subtitle>Role/Email</mat-card-subtitle>
+            </mat-card-header>
+          </mat-card>
+
+          <mat-divider [inset]="true"></mat-divider>
+
+          <a *ngFor="let item of navItems" mat-list-item class="menu-list-item" 
+            routerLink="{{ item.route }}" routerLinkActive="list-item-active">
+            <mat-icon class="route-icon">{{item.iconName}}</mat-icon>
+            <span>{{item.displayName}}</span>
+            <mat-divider [inset]="true" *ngIf="item.endOfSection"></mat-divider>
+          </a>
         </mat-nav-list>
       </mat-sidenav>
   
