@@ -1,0 +1,25 @@
+<div class="container" [class.is-mobile]="mobileQuery.matches">
+    <mat-toolbar color="primary" class="toolbar">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <h1 class="app-name">{{ title }}</h1>
+    </mat-toolbar>
+  
+    <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+      <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" autosize>
+        <mat-nav-list>
+            <a *ngFor="let item of navItems" mat-list-item class="menu-list-item" routerLink="{{ item.route }}" >
+              <mat-icon class="route-icon">{{item.iconName}}</mat-icon>
+              <span>{{item.displayName}}</span>
+              <mat-divider [inset]="true" *ngIf="item.endOfSection"></mat-divider>
+            </a>
+        </mat-nav-list>
+      </mat-sidenav>
+  
+      <mat-sidenav-content>
+        <ng-content></ng-content>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>
+  
