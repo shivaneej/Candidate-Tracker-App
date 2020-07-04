@@ -1,12 +1,14 @@
-<mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+<div class="mat-elevation-z8">
+    <mat-table [dataSource]="dataSource" matSort>
+        <ng-container [matColumnDef]="tableData" *ngFor="let tableData of objectKeys(columnHeader)">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ columnHeader[tableData] }} </mat-header-cell>
+            <mat-cell *matCellDef="let user"> {{ user[tableData] }} </mat-cell>
+        </ng-container>
+    
+        <mat-header-row *matHeaderRowDef="objectKeys(columnHeader)"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: objectKeys(columnHeader);"></mat-row>
+    </mat-table>
+    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" pageSize = "10" showFirstLastButtons></mat-paginator> -->
+    <mat-paginator pageSize = "10" showFirstLastButtons></mat-paginator>
+</div>
 
-    <ng-container [matColumnDef]="tableData" *ngFor="let tableData of objectKeys(columnHeader)">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ columnHeader[tableData] }} </mat-header-cell>
-        <mat-cell *matCellDef="let user"> {{ user[tableData] }} </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="objectKeys(columnHeader)"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: objectKeys(columnHeader);"></mat-row>
-</mat-table>
-<!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" pageSize = "10" showFirstLastButtons></mat-paginator> -->
-<mat-paginator pageSize = "10" showFirstLastButtons></mat-paginator>

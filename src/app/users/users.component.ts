@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SystemUser } from '../system-user';
+import { SystemUser } from '../models/system-user';
 
 @Component({
   selector: 'app-users',

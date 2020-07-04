@@ -1,4 +1,5 @@
-<mat-tab-group mat-stretch-tabs>
+<data-table-filter buttonName="Create New User" link="/users/new"></data-table-filter>
+<mat-tab-group mat-stretch-tabs color="accent">
     <mat-tab label="Admin">
       <ng-template matTabContent>
         <data-table [tableData]="admins" [columnHeader]="columnHeader"></data-table>
@@ -9,12 +10,12 @@
         <data-table [tableData]="ops" [columnHeader]="columnHeader"></data-table>
       </ng-template>
     </mat-tab>
-    <mat-tab label="Recruiters">
+    <mat-tab label="Recruiter">
       <ng-template matTabContent>
         <data-table [tableData]="recruiters" [columnHeader]="columnHeader"></data-table>
       </ng-template>
     </mat-tab>
-    <mat-tab label="Interviewers">
+    <mat-tab label="Interviewer">
         <ng-template matTabContent>
             <data-table [tableData]="interviewers" [columnHeader]="columnHeader"></data-table>
         </ng-template>
