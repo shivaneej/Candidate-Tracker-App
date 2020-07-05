@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'data-table',
@@ -14,6 +15,8 @@ export class DataTableComponent implements OnInit {
   @Input() columnHeader;
   objectKeys = Object.keys;
   dataSource;
+  // selectedColumns = new FormControl();
+
 
   @ViewChild(MatSort, { static : false }) sort: MatSort;
   @ViewChild(MatPaginator, { static : false }) paginator: MatPaginator;
@@ -29,5 +32,10 @@ export class DataTableComponent implements OnInit {
   ngAfterViewInit (){
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }

@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
@@ -17,7 +18,7 @@ import { InterviewsComponent } from './interviews/interviews.component';
 import { MaterialComponentsModule } from './material-components/material-components.module';
 import { DataTableComponent } from './data-table/data-table.component';
 import { DataTableFilterComponent } from './data-table-filter/data-table-filter.component';
-import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
