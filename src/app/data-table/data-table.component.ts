@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'data-table',
@@ -11,16 +10,19 @@ import { FormControl } from '@angular/forms';
 })
 export class DataTableComponent implements OnInit {
 
-  @Input() tableData;
-  @Input() columnHeader;
-  objectKeys = Object.keys;
-  dataSource;
-  // selectedColumns = new FormControl();
-
-
   @ViewChild(MatSort, { static : false }) sort: MatSort;
   @ViewChild(MatPaginator, { static : false }) paginator: MatPaginator;
+  @ViewChild(ElementRef) filterBox : HTMLInputElement;
 
+  @Input() tableData;
+  @Input() columnHeader;
+
+  objectKeys = Object.keys;
+
+  dataSource;
+  selectedColumn = '';
+  filterValue = '';
+  
   constructor() { }
 
   ngOnInit(): void {
@@ -32,10 +34,17 @@ export class DataTableComponent implements OnInit {
   ngAfterViewInit (){
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.dataSource.filterPredicate = (data, filter: string): boolean => {
+      if(this.selectedColumn !== '')
+        return data[this.selectedColumn].toLowerCase().includes(filter);
+      else
+        return JSON.stringify(data).toLowerCase().includes(filter);
+  };
+  
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.filterValue = (event.target !== undefined) ? (event.target as HTMLInputElement).value : this.filterValue;
+    this.dataSource.filter = this.filterValue.trim().toLowerCase();
   }
 }

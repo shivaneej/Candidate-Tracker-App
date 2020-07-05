@@ -5,3 +5,22 @@ body {
     margin: 0;
     padding: 0;
 }
+
+.row {
+    width: 100%;
+    display: inline-block;
+    .col-10 {
+        width: 84%;
+    }
+    .col-2 {
+        width: 16%;
+    }
+    .clear {
+        clear: both;
+    }
+}
+
+.button-right {
+    float: right;
+    display: block;
+}

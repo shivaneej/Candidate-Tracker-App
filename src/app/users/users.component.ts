@@ -33,7 +33,7 @@ export class UsersComponent implements OnInit {
     { name: 'Int 9', email: 'xyz@abc.com'},
     { name: 'Int 10', email: 'xyz@abc.com' }, 
     { name: 'Int 11', email: 'xyz@abc.com'},
-    { name: 'Int 12', email: 'xyz@abc.com'},
+    { name: 'Int 12', email: 'xyz@int.com'},
     { name: 'Int 13', email: 'xyz@abc.com'},
     { name: 'Int 14', email: 'xyz@abc.com' }, 
     { name: 'Int 15', email: 'xyz@abc.com'},
