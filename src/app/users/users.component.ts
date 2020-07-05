@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemUser } from '../models/system-user';
+import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'app-users',
@@ -16,11 +17,12 @@ export class UsersComponent implements OnInit {
     { name: 'OPS 1', email: 'xyz@abc.com' }, 
     { name: 'OPS 2', email: 'xyz@abc.com'},
     { name: 'OPS 3', email: 'xyz@abc.com' }];
-  recruiters : SystemUser[] = [
-    { name: 'Rec 1', email: 'xyz@abc.com' }, 
-    { name: 'Rec 2', email: 'xyz@abc.com'},
-    { name: 'Rec 3', email: 'xyz@abc.com'}
-  ];
+  // recruiters : SystemUser[] = [
+  //   { name: 'Rec 1', email: 'xyz@abc.com' }, 
+  //   { name: 'Rec 2', email: 'xyz@abc.com'},
+  //   { name: 'Rec 3', email: 'xyz@abc.com'}
+  // ];
+  recruiters : SystemUser[];
   interviewers : SystemUser[] = [
     { name: 'Int 1', email: 'xyz@abc.com'},
     { name: 'Int 2', email: 'xyz@abc.com' }, 
@@ -42,9 +44,12 @@ export class UsersComponent implements OnInit {
   columnHeader = {'name': 'Name', 'email': 'Email'};
 
 
-  constructor() { }
+  constructor(private service : UsersService) { }
 
   ngOnInit(): void {
+    this.service.getAll().subscribe(recruiters => {
+      this.recruiters = recruiters as SystemUser[];
+    });
   }
 
 }

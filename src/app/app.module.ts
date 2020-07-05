@@ -18,6 +18,7 @@ import { InterviewsComponent } from './interviews/interviews.component';
 import { MaterialComponentsModule } from './material-components/material-components.module';
 import { DataTableComponent } from './data-table/data-table.component';
 import { DataTableFilterComponent } from './data-table-filter/data-table-filter.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { DataTableFilterComponent } from './data-table-filter/data-table-filter.
     FormsModule,
     BrowserAnimationsModule,
     MaterialComponentsModule,
+    HttpClientModule,
     RouterModule.forRoot([
       { path: '', component: DashboardComponent },
       { path: 'dashboard', component: DashboardComponent },
