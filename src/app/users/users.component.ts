@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemUser } from '../models/system-user';
 import { UsersService } from '../services/users.service';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -17,11 +19,7 @@ export class UsersComponent implements OnInit {
     { name: 'OPS 1', email: 'xyz@abc.com' }, 
     { name: 'OPS 2', email: 'xyz@abc.com'},
     { name: 'OPS 3', email: 'xyz@abc.com' }];
-  // recruiters : SystemUser[] = [
-  //   { name: 'Rec 1', email: 'xyz@abc.com' }, 
-  //   { name: 'Rec 2', email: 'xyz@abc.com'},
-  //   { name: 'Rec 3', email: 'xyz@abc.com'}
-  // ];
+  
   recruiters : SystemUser[];
   interviewers : SystemUser[] = [
     { name: 'Int 1', email: 'xyz@abc.com'},
@@ -42,14 +40,23 @@ export class UsersComponent implements OnInit {
     { name: 'Int 16', email: 'xyz@abc.com'}
   ];
   columnHeader = {'name': 'Name', 'email': 'Email'};
+  recruiterColumnHeader = { 'name': 'Name', 'email': 'Email', 'contact' : 'Contact', 'manager' : 'Manager Email' };
 
 
   constructor(private service : UsersService) { }
 
   ngOnInit(): void {
-    this.service.getAll().subscribe(recruiters => {
-      this.recruiters = recruiters as SystemUser[];
-    });
+    this.service.getAll().pipe(
+      map((recruiters : any) => {
+        return recruiters.map((rec) => {
+            let name = rec.firstName + " " + rec.lastName;
+            let email = rec.email || '';
+            let contact = rec.contact || '';
+            let manager = rec.manager || '';
+            return { name, email, contact, manager } as SystemUser;
+        })
+      }
+    ))
+    .subscribe(recruiters => this.recruiters = recruiters);
   }
-
 }
