@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "CandidateTracker"
+    }
+  },
+  "defaultProject": "CandidateTracker",
+  "cli": {
+    "analytics": false
+  }
 }
