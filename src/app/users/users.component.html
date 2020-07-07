@@ -8,22 +8,26 @@
 <mat-tab-group mat-stretch-tabs color="accent">
     <mat-tab label="Admin">
       <ng-template matTabContent>
-        <data-table [tableData]="admins" [columnHeader]="columnHeader"></data-table>
+        <data-table [tableData]="admins" [columnHeader]="columnHeader" *ngIf="!dataLoading"></data-table>
+        <mat-spinner color="accent" *ngIf="dataLoading"></mat-spinner>
       </ng-template>
     </mat-tab>
     <mat-tab label="OPS">
       <ng-template matTabContent>
-        <data-table [tableData]="ops" [columnHeader]="columnHeader"></data-table>
+        <data-table [tableData]="ops" [columnHeader]="columnHeader" *ngIf="!dataLoading"></data-table>
+        <mat-spinner color="accent" *ngIf="dataLoading"></mat-spinner>
       </ng-template>
     </mat-tab>
     <mat-tab label="Recruiter">
       <ng-template matTabContent>
-        <data-table [tableData]="recruiters" [columnHeader]="recruiterColumnHeader"></data-table>
+        <data-table [tableData]="recruiters" [columnHeader]="columnHeader" *ngIf="!dataLoading"></data-table>
+        <mat-spinner color="accent" *ngIf="dataLoading"></mat-spinner>
       </ng-template>
     </mat-tab>
     <mat-tab label="Interviewer">
         <ng-template matTabContent>
-            <data-table [tableData]="interviewers" [columnHeader]="columnHeader"></data-table>
+            <data-table [tableData]="interviewers" [columnHeader]="columnHeader" *ngIf="!dataLoading"></data-table>
+            <mat-spinner color="accent" *ngIf="dataLoading"></mat-spinner>
         </ng-template>
     </mat-tab>
 </mat-tab-group>
