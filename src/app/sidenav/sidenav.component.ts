@@ -14,7 +14,7 @@ export class SidenavComponent implements OnDestroy {
   mobileQuery: MediaQueryList;
   fillerNav = ['Dashboard', 'View Users', 'View Candidates', 'View Interviews', 'Edit Profile', 'Change Password', 'Logout'];
 
-  userEmail : string ;
+  user : any ;
   @Input('title') title : string;
   private _mobileQueryListener: () => void;
 
@@ -29,7 +29,8 @@ export class SidenavComponent implements OnDestroy {
       displayName: 'View Users',
       iconName: 'supervisor_account',
       route: '/users',
-      endOfSection: false
+      endOfSection: false,
+      canView: ['Root', 'Admin', 'OPS']
     },
     {
       displayName: 'View Candidates',
@@ -63,9 +64,9 @@ export class SidenavComponent implements OnDestroy {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
-    this.userEmail = this.authService.userLoggedIn();
-    this.authService.authStateChanged.subscribe((email) => {
-      this.userEmail = email;
+    this.user = this.authService.userLoggedIn();
+    this.authService.authStateChanged.subscribe((user) => {
+      this.user = user;
     })
   }
 

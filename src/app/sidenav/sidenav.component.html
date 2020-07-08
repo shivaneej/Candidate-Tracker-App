@@ -1,6 +1,6 @@
 <div class="container" [class.is-mobile]="mobileQuery.matches">
     <mat-toolbar color="primary" class="toolbar">
-      <button mat-icon-button (click)="sidenav.toggle()" *ngIf="userEmail !== null">
+      <button mat-icon-button (click)="sidenav.toggle()" *ngIf="user !== null">
         <mat-icon>menu</mat-icon>
       </button>
       <h1 class="app-name">{{ title }}</h1>
@@ -8,29 +8,27 @@
   
     <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
       <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="56" autosize>
-        <mat-nav-list *ngIf="userEmail !== null">
+        <mat-nav-list *ngIf="user !== null">
           <mat-card mat-list-item class="example-card">
             <mat-card-header>
               <div mat-card-avatar class="example-header-image"></div>
               <mat-card-title>Name</mat-card-title>
-              <mat-card-subtitle>{{ userEmail }}</mat-card-subtitle>
+              <mat-card-subtitle>{{ user.email }}
+                <mat-chip-list> <mat-chip color="accent" selected>{{ user.role }}</mat-chip> </mat-chip-list>
+              </mat-card-subtitle>
+              
             </mat-card-header>
           </mat-card>
 
           <mat-divider [inset]="true"></mat-divider>
-
-          <a *ngFor="let item of navItems" mat-list-item class="menu-list-item" 
-            routerLink="{{ item.route }}" routerLinkActive="list-item-active">
-            <mat-icon class="route-icon">{{item.iconName}}</mat-icon>
-            <span>{{item.displayName}}</span>
-            <mat-divider [inset]="true" *ngIf="item.endOfSection"></mat-divider>
-          </a>
-          <!-- {
-            displayName: 'Logout',
-            iconName: 'exit_to_app',
-            route: '/logout'
-          } -->
-
+          <ng-container *ngFor="let item of navItems">
+            <a mat-list-item class="menu-list-item" 
+              routerLink="{{ item.route }}" routerLinkActive="list-item-active" *ngIf="item.canView === undefined || item.canView.includes(user.role)">
+              <mat-icon class="route-icon">{{item.iconName}}</mat-icon>
+              <span>{{item.displayName}}</span>
+              <mat-divider [inset]="true" *ngIf="item.endOfSection"></mat-divider>
+            </a>
+          </ng-container>
           <mat-list-item class="menu-list-item" (click)="logout()">
             <mat-icon class="route-icon">exit_to_app</mat-icon>
             <span>Logout</span>

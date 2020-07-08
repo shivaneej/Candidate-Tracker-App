@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +22,12 @@ export class AuthService {
         
         // Check response and return
         if(validCredentials) {
-          sessionStorage.setItem('email',email);
+          localStorage.setItem('email', email);
+          localStorage.setItem('role', 'Root');
           this.authStateChanged.next(email);
+          
           // let token = 'Bearer '+ response.token;
-          // sessionStorage.setItem('token', token);
+          // localStorage.setItem('token', token);
         }
         resolve(validCredentials);
       }, 1000);
@@ -32,12 +35,13 @@ export class AuthService {
   }
 
   userLoggedIn() {
-    let user = sessionStorage.getItem('email');
-    return user;
+    let userEmail = localStorage.getItem('email');
+    let userRole = localStorage.getItem('role');
+    return { email : userEmail, role : userRole };
   }
 
   logout() {
-    sessionStorage.removeItem('email');
+    localStorage.removeItem('email');
     this.authStateChanged.next(null);
   }
 }

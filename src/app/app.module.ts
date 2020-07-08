@@ -19,6 +19,9 @@ import { MaterialComponentsModule } from './material-components/material-compone
 import { DataTableComponent } from './data-table/data-table.component';
 import { DataTableFilterComponent } from './data-table-filter/data-table-filter.component';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthGuard } from './services/auth-guard.service';
+import { UserFormComponent } from './user-form/user-form.component';
+import { RoleAuthGuard } from './services/role-auth-guard.service';
 
 
 @NgModule({
@@ -34,7 +37,8 @@ import { HttpClientModule } from '@angular/common/http';
     SidenavComponent,
     InterviewsComponent,
     DataTableComponent,
-    DataTableFilterComponent
+    DataTableFilterComponent,
+    UserFormComponent
   ],
   imports: [
     BrowserModule,
@@ -44,17 +48,21 @@ import { HttpClientModule } from '@angular/common/http';
     MaterialComponentsModule,
     HttpClientModule,
     RouterModule.forRoot([
-      { path: '', component: DashboardComponent },
-      { path: 'dashboard', component: DashboardComponent },
+      { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
+      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
-      { path: 'users', component: UsersComponent },
-      { path: 'candidates', component: CandidatesComponent },
-      { path: 'interviews', component: InterviewsComponent },
-      { path: 'profile/edit', component: ProfileComponent },
+      { path: 'users', component: UsersComponent, canActivate: [AuthGuard, RoleAuthGuard] },
+      { path: 'users/new', component: UserFormComponent, canActivate: [AuthGuard, RoleAuthGuard] },
+      { path: 'users/:id', component: UserFormComponent, canActivate: [AuthGuard] },
+      { path: 'candidates', component: CandidatesComponent, canActivate: [AuthGuard] },
+      { path: 'interviews', component: InterviewsComponent, canActivate: [AuthGuard] },
+      { path: 'profile/edit', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: '**', component: LoginComponent } // change to 404 
     ]),
   ],
-  providers: [],
+  providers: [
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

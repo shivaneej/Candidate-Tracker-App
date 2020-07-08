@@ -14,6 +14,10 @@ export class DataService {
     };
     return this.http.get(this.url, httpOptions);
   }
+
+  save(resource) {
+    console.log("Save called for object " + JSON.stringify(resource));
+  }
 }
 
 

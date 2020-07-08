@@ -2,7 +2,7 @@
     <mat-form-field appearance = "outline" class="col-2">
         <mat-label>Filter By</mat-label>
         <mat-select [(value)]="selectedColumn" (selectionChange)="applyFilter($event)">
-            <mat-option value="all"> All Fields </mat-option>  
+            <mat-option> All Fields </mat-option>  
             <mat-option *ngFor="let column of objectKeys(columnHeader)" [value]="column">
                 {{ columnHeader[column] }}
             </mat-option>

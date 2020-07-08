@@ -1,0 +1,47 @@
+<mat-card>
+    <mat-card-content>
+        <form [formGroup] = "form" (ngSubmit)="save()">
+            <h2>Create a new user</h2>
+            <div class="form-group row">
+                <mat-form-field appearance="outline" class="col-6">
+                    <mat-label>First Name</mat-label>
+                    <input matInput placeholder="First Name" formControlName="firstName" required>
+                    <mat-error *ngIf="firstName.errors?.required">First name is required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-6">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput placeholder="Last Name" formControlName="lastName" required>
+                    <mat-error *ngIf="lastName.errors?.required">Last name is required</mat-error>
+                </mat-form-field>
+            </div>
+            <mat-form-field appearance = "outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" placeholder="Email" formControlName="email" required>
+                <mat-error *ngIf="email.errors?.required">Email is required</mat-error>
+                <mat-error *ngIf="email.errors?.email">Email entered is invalid</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance = "outline">
+                <mat-label>Contact</mat-label>
+                <input matInput type="tel" placeholder="Contact" formControlName="contact" required>
+                <mat-error *ngIf="contact.errors?.required">Contact is required</mat-error>
+                <mat-error *ngIf="contact.errors?.pattern">Contact entered is invalid</mat-error>
+            </mat-form-field>
+            <div class="form-group row">
+                <mat-form-field appearance="outline" class="col-4">
+                    <mat-label>Role</mat-label>
+                    <mat-select formControlName="role" required>
+                      <mat-option *ngFor="let role of roleOptions" [value]="role">{{ role }}</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="role.errors?.required">Role is required</mat-error>
+                </mat-form-field>
+                <mat-form-field class="col" appearance = "outline">
+                    <mat-label>Manager Email</mat-label>
+                    <input matInput type="email" placeholder="Manager Email" formControlName="managerEmail" required>
+                    <mat-error *ngIf="email.errors?.required">Email is required</mat-error>
+                    <mat-error *ngIf="email.errors?.email">Email entered is invalid</mat-error>
+                </mat-form-field>
+            </div>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid" class="full-width-button">Save</button>
+        </form>
+    </mat-card-content>
+</mat-card>

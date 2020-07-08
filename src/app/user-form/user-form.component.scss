@@ -1,0 +1,23 @@
+mat-card {
+    max-width: 800px;
+    margin: 2em auto;
+    text-align: center;
+    padding: 2em 5em;
+}
+  
+mat-form-field {
+    display: block;
+}
+
+.form-group {
+    display: flex;
+    mat-form-field {
+        // width: -webkit-fill-available;
+        margin-right: 0.5em;
+        box-sizing: border-box;
+    }
+    mat-form-field:last-of-type {
+        margin-right: 0em;  
+    }
+}
+

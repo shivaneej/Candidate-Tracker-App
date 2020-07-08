@@ -35,7 +35,7 @@ export class DataTableComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.dataSource.filterPredicate = (data, filter: string): boolean => {
-      if(this.selectedColumn !== '' && this.selectedColumn !== 'all')
+      if(this.selectedColumn !== '' && this.selectedColumn !== undefined)
         return data[this.selectedColumn].toLowerCase().includes(filter);
       else
         return JSON.stringify(data).toLowerCase().includes(filter);

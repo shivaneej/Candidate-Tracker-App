@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormBuilder, FormGroupDirective } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { config } from 'process';
@@ -14,11 +14,13 @@ export class LoginComponent implements OnInit {
 
   form;
   authPending : boolean = false;
+  hide : boolean = true;
   @ViewChild(FormGroupDirective) formDirective;
 
   constructor(
     private builder: FormBuilder, 
     private router : Router, 
+    private route : ActivatedRoute,
     private authService : AuthService,
     private snackBar: MatSnackBar ) {
       // let emailRegex = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$";
@@ -46,7 +48,8 @@ export class LoginComponent implements OnInit {
         duration: 2000,
       });
     } else {
-      this.router.navigateByUrl('/dashboard');
+      let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
+      this.router.navigateByUrl(returnUrl);
     }
   }
 
