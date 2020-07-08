@@ -12,11 +12,6 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-
-  admins : SystemUser[];
-  ops : SystemUser[];
-  recruiters : SystemUser[];
-  interviewers : SystemUser[]; 
   dataLoading : boolean = false;
   usersByRole;
   rolesToDisplay;
@@ -46,11 +41,6 @@ export class UsersComponent implements OnInit {
       ))
       .subscribe(users => {
         this.usersByRole = groupBy(users, ( x: SystemUser ) => x.role);
-        console.log(this.usersByRole);
-        this.admins = this.usersByRole.Admin;
-        this.ops = this.usersByRole.OPS;
-        this.recruiters = this.usersByRole.Recruiter; 
-        this.interviewers = this.usersByRole.Interviewer; 
         this.dataLoading = false; 
       });
     }, 2000);
