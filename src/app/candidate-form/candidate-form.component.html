@@ -1,0 +1,91 @@
+<mat-card>
+    <mat-card-content>
+        <form [formGroup] = "form" (ngSubmit)="save()">
+            <h2>Create a new candidate</h2>
+            <!-- Name -->
+            <div class="form-group row">
+                <mat-form-field appearance="outline" class="col-6">
+                    <mat-label>First Name</mat-label>
+                    <input matInput placeholder="First Name" formControlName="firstName" required>
+                    <mat-error *ngIf="firstName.errors?.required">First name is required</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="col-6">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput placeholder="Last Name" formControlName="lastName" required>
+                    <mat-error *ngIf="lastName.errors?.required">Last name is required</mat-error>
+                </mat-form-field>
+            </div>
+
+            <!-- Email -->
+            <mat-form-field appearance = "outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" placeholder="Email" formControlName="email" required>
+                <mat-error *ngIf="email.errors?.required">Email is required</mat-error>
+                <mat-error *ngIf="email.errors?.email">Email entered is invalid</mat-error>
+            </mat-form-field>
+
+            <!-- Contact-->
+            <mat-form-field appearance = "outline">
+                <mat-label>Contact</mat-label>
+                <input matInput type="tel" placeholder="Contact" formControlName="contact" required>
+                <mat-error *ngIf="contact.errors?.required">Contact is required</mat-error>
+                <mat-error *ngIf="contact.errors?.pattern">Contact entered is invalid</mat-error>
+            </mat-form-field>
+
+            <!-- Address -->
+            <mat-form-field appearance="outline">
+                <mat-label>Address</mat-label>
+                <input matInput placeholder="Address" formControlName="address" required>
+                <mat-error *ngIf="address.errors?.required">Address is required</mat-error>
+            </mat-form-field>
+
+            <!-- Preferred Location -->
+            <mat-form-field appearance="outline">
+                <mat-label>Preferred Location</mat-label>
+                <input matInput placeholder="Preferred Location" formControlName="preferredLoc" required>
+                <mat-error *ngIf="preferredLoc.errors?.required">Preferred Location is required</mat-error>
+            </mat-form-field>
+
+            <!-- ECTC & CTCT -->
+            <div class="form-group row">
+                <mat-form-field appearance="outline" class="col-6">
+                    <mat-label>ECTC (&#x20B9;)</mat-label>
+                    <input matInput type="number" placeholder="ECTC" formControlName="ectc" required>
+                    <mat-error *ngIf="ectc.errors?.required">ECTC is required</mat-error>
+                    <mat-error *ngIf="ectc.errors?.min">Entered ECTC is invalid</mat-error>
+                </mat-form-field>
+                <mat-form-field class="col-6" appearance = "outline">
+                    <mat-label>CTCT (&#x20B9;)</mat-label>
+                    <input matInput type="number" placeholder="CTCT" formControlName="ctct" required>
+                    <mat-error *ngIf="ctct.errors?.required">CTCT is required</mat-error>
+                    <mat-error *ngIf="ctct.errors?.min">Entered CTCT is invalid</mat-error>
+                </mat-form-field>
+            </div>
+
+            <!-- Source -->
+            <mat-form-field appearance = "outline">
+                <mat-label>Source</mat-label>
+                <input matInput placeholder="Source" formControlName="source" required>
+                <mat-error *ngIf="source.errors?.required">Source is required</mat-error>
+            </mat-form-field>
+
+            <!-- CV -->
+
+            <mat-form-field>
+                <mat-label *ngIf="selectedFile; else newFile">{{selectedFile.name}}</mat-label>
+                <ng-template #newFile>
+                    <mat-label>Upload CV *</mat-label>
+                </ng-template>
+                <input matInput disabled>
+                <button type="button" mat-mini-fab color="accent" matSuffix (click)="fileInput.click()">
+                    <mat-icon>attach_file</mat-icon>
+                </button>
+                <input hidden required formControlName="fileInput" 
+                (change)="selectFile($event)" #fileInput type="file" id="file"
+                accept=".pdf,.doc,.docx">
+            </mat-form-field>
+
+            <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid" class="full-width-button">Save</button>
+        </form>
+    </mat-card-content>
+</mat-card>

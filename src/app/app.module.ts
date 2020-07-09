@@ -21,7 +21,8 @@ import { DataTableFilterComponent } from './data-table-filter/data-table-filter.
 import { HttpClientModule } from '@angular/common/http';
 import { AuthGuard } from './services/auth-guard.service';
 import { UserFormComponent } from './user-form/user-form.component';
-import { RoleAuthGuard } from './services/role-auth-guard.service';
+import { UserAuthGuard } from './services/user-auth-guard.service';
+import { CandidateFormComponent } from './candidate-form/candidate-form.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { RoleAuthGuard } from './services/role-auth-guard.service';
     InterviewsComponent,
     DataTableComponent,
     DataTableFilterComponent,
-    UserFormComponent
+    UserFormComponent,
+    CandidateFormComponent
   ],
   imports: [
     BrowserModule,
@@ -51,10 +53,11 @@ import { RoleAuthGuard } from './services/role-auth-guard.service';
       { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
-      { path: 'users', component: UsersComponent, canActivate: [AuthGuard, RoleAuthGuard] },
-      { path: 'users/new', component: UserFormComponent, canActivate: [AuthGuard, RoleAuthGuard] },
+      { path: 'users', component: UsersComponent, canActivate: [AuthGuard, UserAuthGuard] },
+      { path: 'users/new', component: UserFormComponent, canActivate: [AuthGuard, UserAuthGuard] },
       { path: 'users/:id', component: UserFormComponent, canActivate: [AuthGuard] },
       { path: 'candidates', component: CandidatesComponent, canActivate: [AuthGuard] },
+      { path: 'candidates/new', component: CandidateFormComponent, canActivate: [AuthGuard] },
       { path: 'interviews', component: InterviewsComponent, canActivate: [AuthGuard] },
       { path: 'profile/edit', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: '**', component: LoginComponent } // change to 404 

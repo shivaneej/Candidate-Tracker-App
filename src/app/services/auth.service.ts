@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
+import { Subject, Observable, of } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AuthService {
 
-  public authStateChanged : Subject<string> = new Subject<string>();
+  public authStateChanged : Subject<any> = new Subject<any>();
 
   constructor(private http : HttpClient) { }
 
@@ -24,7 +24,7 @@ export class AuthService {
         if(validCredentials) {
           localStorage.setItem('email', email);
           localStorage.setItem('role', 'Root');
-          this.authStateChanged.next(email);
+          this.authStateChanged.next({ email : email, role : 'Root'});
           
           // let token = 'Bearer '+ response.token;
           // localStorage.setItem('token', token);
@@ -37,11 +37,14 @@ export class AuthService {
   userLoggedIn() {
     let userEmail = localStorage.getItem('email');
     let userRole = localStorage.getItem('role');
-    return { email : userEmail, role : userRole };
+    if(userEmail && userRole)
+      return { email : userEmail, role : userRole };
+    return null;
   }
 
   logout() {
     localStorage.removeItem('email');
+    localStorage.removeItem('role');
     this.authStateChanged.next(null);
   }
 }

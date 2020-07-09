@@ -6,7 +6,7 @@ import { RoleService } from './role.service';
 @Injectable({
   providedIn: 'root'
 })
-export class RoleAuthGuard {
+export class UserAuthGuard {
 
   constructor(private auth : AuthService, private router : Router, private roleService : RoleService) { }
 
