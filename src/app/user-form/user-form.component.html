@@ -36,10 +36,10 @@
                 </mat-form-field>
                 <mat-form-field class="col" appearance = "outline">
                     <mat-label>Manager Email</mat-label>
-                    <input matInput type="email" placeholder="Manager Email" formControlName="managerEmail" [matAutocomplete]="auto" required>
-                    <mat-autocomplete #auto="matAutocomplete">
-                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                          {{option}}
+                    <input matInput type="email" placeholder="Manager Email" formControlName="manager" [matAutocomplete]="auto" required>
+                    <mat-autocomplete #auto="matAutocomplete" >
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option.email">
+                          {{ option.email }}
                         </mat-option>
                     </mat-autocomplete>
                     <mat-error *ngIf="email.errors?.required">Email is required</mat-error>

@@ -18,11 +18,12 @@ import { InterviewsComponent } from './interviews/interviews.component';
 import { MaterialComponentsModule } from './material-components/material-components.module';
 import { DataTableComponent } from './data-table/data-table.component';
 import { DataTableFilterComponent } from './data-table-filter/data-table-filter.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthGuard } from './services/auth-guard.service';
 import { UserFormComponent } from './user-form/user-form.component';
 import { UserAuthGuard } from './services/user-auth-guard.service';
 import { CandidateFormComponent } from './candidate-form/candidate-form.component';
+import { HeaderInterceptor } from './header.interceptor';
 
 
 @NgModule({
@@ -63,8 +64,11 @@ import { CandidateFormComponent } from './candidate-form/candidate-form.componen
       { path: '**', component: LoginComponent } // change to 404 
     ]),
   ],
-  providers: [
-    AuthGuard
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: HeaderInterceptor,
+    multi: true,
+  }
   ],
   bootstrap: [AppComponent]
 })

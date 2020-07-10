@@ -6,6 +6,7 @@ import { AuthService } from '../services/auth.service';
 import { RoleService } from '../services/role.service';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-form',
@@ -18,13 +19,14 @@ export class UserFormComponent implements OnInit {
   roleOptions;
   user;
   selectedRole;
-  options: string[] = [];
+  options: any[] = [];
   filteredOptions: Observable<string[]>;
   constructor( private builder: FormBuilder, 
     private usersService : UsersService,
     private router : Router, 
     private authService : AuthService,
-    private roleService : RoleService ) { 
+    private roleService : RoleService,
+    private snackBar: MatSnackBar ) { 
     
     this.user = this.authService.userLoggedIn();
     this.roleOptions = this.roleService.rolesToDisplay(this.user.role);
@@ -35,39 +37,59 @@ export class UserFormComponent implements OnInit {
       email : ['', [ Validators.required, Validators.email]],
       contact : ['', [Validators.required, Validators.pattern(pattern)]],
       role : ['', Validators.required],
-      managerEmail : [this.user.email, [Validators.required, Validators.email]],
+      manager : [this.user.email, [Validators.required, Validators.email]],
     });
     if(!this.canEditManager)
-      this.managerEmail.disable();
+      this.manager.disable();
   }
 
   ngOnInit(): void {
-    this.filteredOptions = this.managerEmail.valueChanges
+    this.filteredOptions = this.manager.valueChanges
       .pipe(
         startWith(''),
-        map((value : string) => this._filter(value))
+        map((value : string) => this._filter(value)),
       );
   }
 
   private _filter(value: string): string[] {
     const filterValue = value?.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    return this.options.filter(option => option.email.toLowerCase().includes(filterValue));
   }
 
   save() {
-    this.usersService.save(this.form.value);
+    let processedFormData = this.processManagerData(this.form.value, this.options);
+    if(processedFormData === null) {
+      this.snackBar.open("Could not create user", "Dismiss", {
+        duration: 2000,
+      });
+      return;
+    }    
+    this.usersService.save(processedFormData);
     this.router.navigateByUrl('/users');
+  }
+
+  processManagerData(formData, options) {
+    let manager = options.filter(m => {
+      return m.email === formData.manager;
+    });
+    if(!manager[0]) return null;
+    let processedFormData = Object.assign({}, formData);
+    processedFormData.manager = manager[0].id;
+    return processedFormData;
   }
 
   toggleEdit() {
     if(!this.canEditManager){
-      this.managerEmail.disable();
-      this.managerEmail.setValue(this.user.email);
+      this.manager.disable();
+      this.manager.setValue(this.user.email);
     }
     else {
-      this.managerEmail.enable();
-      this.managerEmail.reset();
-      this.options = this.usersService.getByRole(this.selectedRole);
+      this.manager.enable();
+      this.manager.reset();
+      this.usersService.getByRole(this.selectedRole).subscribe(options => {
+        this.options = options as any;
+        console.log(this.options);
+      });
     }
   }
   
@@ -77,6 +99,7 @@ export class UserFormComponent implements OnInit {
     let selectedRoleIndex = this.roleService._roles.indexOf(this.selectedRole);
     return (selectedRoleIndex - currentRoleIndex) > 1 ;
   }
+  
   get firstName() {
     return this.form.get('firstName');
   }
@@ -92,8 +115,8 @@ export class UserFormComponent implements OnInit {
   get role() {
     return this.form.get('role');
   }
-  get managerEmail() {
-    return this.form.get('managerEmail');
+  get manager() {
+    return this.form.get('manager');
   }
 
 }
