@@ -14,10 +14,13 @@ export class DataTableComponent implements OnInit {
   @ViewChild(MatPaginator, { static : false }) paginator: MatPaginator;
   @ViewChild(ElementRef) filterBox : HTMLInputElement;
 
-  @Input() tableData;
-  @Input() columnHeader;
+  @Input('tableData') tableData;
+  @Input('columnHeader') columnHeader;
+  @Input('actionName') actionName;
+  @Input('actionLinkPrefix') actionLinkPrefix;
 
   objectKeys = Object.keys;
+  objectAssign = Object.assign;
 
   dataSource;
   selectedColumn = '';
@@ -39,8 +42,13 @@ export class DataTableComponent implements OnInit {
         return data[this.selectedColumn].toLowerCase().includes(filter);
       else
         return JSON.stringify(data).toLowerCase().includes(filter);
-  };
-  
+    };
+  }
+
+  get displayColumns() {
+    if(!this.actionLinkPrefix) 
+      return this.objectKeys(this.columnHeader);
+    return this.objectKeys( {...this.columnHeader, 'actions' : ''} );
   }
 
   applyFilter(event: Event) {

@@ -1,4 +1,3 @@
-<!-- <data-table-filter buttonName="Create New User" link="/users/new"></data-table-filter> -->
 <div class="row">
   <a mat-raised-button color="accent" routerLink="/users/new" class="button-right" appearance="outline"> 
     Create New User
@@ -8,7 +7,9 @@
 <mat-tab-group mat-stretch-tabs color="accent">
   <mat-tab *ngFor="let role of rolesToDisplay" [label]="role">
     <ng-template matTabContent>
-        <data-table [tableData]="usersByRole[role]" [columnHeader]="columnHeader" *ngIf="!dataLoading"></data-table>
+        <data-table [tableData]="usersByRole[role]" [columnHeader]="columnHeader" 
+        actionName="Edit" actionLinkPrefix="/users/"
+        *ngIf="!dataLoading"></data-table>
         <mat-spinner color="accent" *ngIf="dataLoading"></mat-spinner>
     </ng-template>
   </mat-tab>

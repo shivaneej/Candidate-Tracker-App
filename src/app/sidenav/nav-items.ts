@@ -18,14 +18,8 @@ export const navItemsList = [
       displayName: 'View Candidates',
       iconName: 'people_alt',
       route: '/candidates',
-      endOfSection: false,
+      endOfSection: true,
       canView: CANDIDATE_PERMISSION.read
-    },
-    {
-      displayName: 'View Interviews',
-      iconName: 'event_note',
-      route: '/interviews',
-      endOfSection: true
     },
     {
       displayName: 'Edit Profile',

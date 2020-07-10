@@ -1,5 +1,4 @@
-<!-- <data-table-filter buttonName="Create New Candidate" link="/candidates/new"></data-table-filter> -->
 <a mat-raised-button color="accent" routerLink="/candidates/new" class="button-right" appearance="outline"> 
     Create New Candidate 
 </a>
-<data-table [tableData]="candidates" [columnHeader]="columnHeader"></data-table>
+<data-table [tableData]="candidates" [columnHeader]="columnHeader" actionName="View" actionLinkPrefix="/candidates/"></data-table>
