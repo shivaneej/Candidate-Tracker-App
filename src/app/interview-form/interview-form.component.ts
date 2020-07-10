@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { InterviewService } from '../services/interview.service';
 import { UsersService } from '../services/users.service';
+import { TimeValidator } from './time.validator';
 
 @Component({
   selector: 'app-interview-form',
@@ -29,8 +30,10 @@ export class InterviewFormComponent implements OnInit {
     private snackbar : MatSnackBar ) {
     this.form = builder.group({
       interviewer : ['', [Validators.required, Validators.email]],
-      date : ['', [Validators.required]]
-    });
+      date : ['', [Validators.required]],
+      startTime : ['', [Validators.required]],
+      endTime : ['', [Validators.required]],
+    }, { validators: TimeValidator.validDuration });
     let min = new Date(), max = new Date();
     min.setDate(new Date().getDate() + 1);
     max.setMonth(new Date().getMonth() + 1);
@@ -62,7 +65,7 @@ export class InterviewFormComponent implements OnInit {
   }
 
   save() {
-    let processedFormData = this.processInterviewerData(this.form.value, this.options);
+    let processedFormData = this.processInterviewData(this.form.value, this.options);
     if(processedFormData === null) {
       this.snackbar.open("Could not schedule interview", "Dismiss", {
         duration: 2000,
@@ -73,13 +76,14 @@ export class InterviewFormComponent implements OnInit {
     this.router.navigateByUrl('/dashboard');
   }
 
-  processInterviewerData(formData, options) {
+  processInterviewData(formData, options) {
     let interviewer = options.filter(i => {
       return i.email === formData.interviewer;
     });
     if(!interviewer[0]) return null;
     let processedFormData = Object.assign({ candidate : this.candidate }, formData);
     processedFormData.interviewer = interviewer[0].id;
+    processedFormData.date = processedFormData.date.toDateString();
     return processedFormData;
   }
 
@@ -88,6 +92,12 @@ export class InterviewFormComponent implements OnInit {
   }
   get date() {
     return this.form.get('date');
+  }
+  get startTime() {
+    return this.form.get('startTime');
+  }
+  get endTime() {
+    return this.form.get('endTime');
   }
 
 }

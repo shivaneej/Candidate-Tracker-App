@@ -1,5 +1,6 @@
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "app/colors";
 
 body {
     margin: 0;
@@ -45,3 +46,31 @@ body {
 div.mat-tab-body-content {
     overflow: hidden;
 }
+
+.timePicker {
+    .timepicker__header {
+        background-color: $primary !important;
+    }
+    .clock-face__clock-hand {
+        background-color: $primary !important;
+        &::after {
+            background-color: $primary !important;
+        }
+        &::before {
+            border-color: $primary !important;
+        }
+    }
+    .clock-face__number {
+        > span.active {
+          background-color: $primary !important;
+        }
+    }
+    button:not(.timepicker-dial__item) {
+        color: $primary !important;
+    }
+    
+    
+}
+
+
+

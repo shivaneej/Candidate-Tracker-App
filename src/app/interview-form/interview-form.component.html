@@ -15,25 +15,32 @@
             </mat-form-field>
 
             <div class="form-group row">
-                <mat-form-field class="example-full-width" appearance="outline">
+                <mat-form-field class="col-4" appearance="outline">
                     <mat-label>Choose a date</mat-label>
-                    <input matInput [min]="minDate" [max]="maxDate" [matDatepickerFilter]="filter" [matDatepicker]="picker" formControlName="date">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
+                    <input matInput [min]="minDate" [max]="maxDate" [matDatepickerFilter]="filter" [matDatepicker]="datePicker" formControlName="date">
+                    <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #datePicker></mat-datepicker>
                 </mat-form-field>
 
-                <!-- <mat-form-field appearance="outline" class="col-6">
-                    <mat-label>Last Name</mat-label>
-                    <input matInput placeholder="Last Name" formControlName="lastName" required>
-                    <mat-error *ngIf="lastName.errors?.required">Last name is required</mat-error>
+                <mat-form-field class="col-4" appearance="outline">
+                    <mat-label>Choose start time</mat-label>
+                    <input matInput [ngxTimepicker]="startTimePicker" formControlName="startTime">
+                    <ngx-material-timepicker #startTimePicker [disableAnimation]="true"
+                    timepickerClass="timePicker"></ngx-material-timepicker>
+                    <ngx-material-timepicker-toggle matSuffix [for]="startTimePicker"></ngx-material-timepicker-toggle>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="col-6">
-                    <mat-label>Last Name</mat-label>
-                    <input matInput placeholder="Last Name" formControlName="lastName" required>
-                    <mat-error *ngIf="lastName.errors?.required">Last name is required</mat-error>
-                </mat-form-field> -->
+                <mat-form-field class="col-4" appearance="outline">
+                    <mat-label>Choose end time</mat-label>
+                    <input matInput [ngxTimepicker]="endTimePicker" formControlName="endTime" [min]="startTime.value">
+                    <ngx-material-timepicker  #endTimePicker [disableAnimation]="true"
+                    timepickerClass="timePicker"></ngx-material-timepicker>
+                    <ngx-material-timepicker-toggle matSuffix [for]="endTimePicker"></ngx-material-timepicker-toggle>
+                </mat-form-field>
             </div>
+            <mat-error *ngIf = "endTime.valid && form.invalid && form.errors?.invalidDuration">
+                End time should be greater than start time
+            </mat-error>
             <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid" class="full-width-button">Save</button>
         </form>
     </mat-card-content>

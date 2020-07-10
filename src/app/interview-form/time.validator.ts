@@ -1,0 +1,27 @@
+import { AbstractControl } from '@angular/forms';
+
+export class TimeValidator{
+    static validDuration(control : AbstractControl){
+        let start = control.get('startTime').value;
+        let end = control.get('endTime').value;
+
+        var startTime = TimeValidator.convertToTime(start);
+        var endTime = TimeValidator.convertToTime(end);
+
+        if(startTime.hours > endTime.hours || (startTime.hours === endTime.hours && startTime.minutes >= endTime.minutes) )
+            return { invalidDuration : true };
+        return null;
+    }
+
+    static convertToTime(timeString : string ) {
+        const [time, modifier] = timeString.split(' ');
+        let [hours, minutes] = time.split(':');
+        if (hours === '12') {
+          hours = '00';
+        }
+        if (modifier === 'PM') {
+          hours = (parseInt(hours, 10) + 12).toString();
+        }
+        return { hours : hours, minutes : minutes };
+    }
+}
