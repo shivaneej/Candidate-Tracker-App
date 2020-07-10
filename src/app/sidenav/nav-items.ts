@@ -1,3 +1,5 @@
+import { USER_PERMISSION, CANDIDATE_PERMISSION } from '../services/guards/permissions';
+
 export const navItemsList = [
     {
       displayName: 'Dashboard',
@@ -10,13 +12,14 @@ export const navItemsList = [
       iconName: 'supervisor_account',
       route: '/users',
       endOfSection: false,
-      canView: ['Root', 'Admin', 'OPS']
+      canView: USER_PERMISSION.read
     },
     {
       displayName: 'View Candidates',
       iconName: 'people_alt',
       route: '/candidates',
-      endOfSection: false
+      endOfSection: false,
+      canView: CANDIDATE_PERMISSION.read
     },
     {
       displayName: 'View Interviews',

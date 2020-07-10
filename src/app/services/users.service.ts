@@ -17,5 +17,10 @@ export class UsersService extends DataService{
     let url = 'http://localhost:8080/users/role/' + role.toLowerCase();
     return this.http.get(url);
   }
+
+  changePassword(oldPassword, newPassword) {
+    // POST request
+    console.log("Change password from " + oldPassword + " to " + newPassword);  
+  }
 }
 

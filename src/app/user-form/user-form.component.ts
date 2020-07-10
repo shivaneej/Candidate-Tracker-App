@@ -7,6 +7,7 @@ import { RoleService } from '../services/role.service';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { USER_PERMISSION } from '../services/guards/permissions';
 
 @Component({
   selector: 'app-user-form',
@@ -88,14 +89,13 @@ export class UserFormComponent implements OnInit {
       this.manager.reset();
       this.usersService.getByRole(this.selectedRole).subscribe(options => {
         this.options = options as any;
-        console.log(this.options);
       });
     }
   }
   
   get canEditManager() {
+    if(!USER_PERMISSION.writeManager.includes(this.user.role)) return false;
     let currentRoleIndex = this.roleService._roles.indexOf(this.user.role);
-    if (currentRoleIndex >= 2) return false;
     let selectedRoleIndex = this.roleService._roles.indexOf(this.selectedRole);
     return (selectedRoleIndex - currentRoleIndex) > 1 ;
   }

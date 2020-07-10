@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HeaderInterceptor } from './header.interceptor';
 
 
 import { AppComponent } from './app.component';
@@ -18,12 +20,15 @@ import { InterviewsComponent } from './interviews/interviews.component';
 import { MaterialComponentsModule } from './material-components/material-components.module';
 import { DataTableComponent } from './data-table/data-table.component';
 import { DataTableFilterComponent } from './data-table-filter/data-table-filter.component';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthGuard } from './services/auth-guard.service';
 import { UserFormComponent } from './user-form/user-form.component';
-import { UserAuthGuard } from './services/user-auth-guard.service';
 import { CandidateFormComponent } from './candidate-form/candidate-form.component';
-import { HeaderInterceptor } from './header.interceptor';
+import { ChangePasswordComponent } from './change-password/change-password.component';
+
+import { AuthGuard } from './services/guards/auth-guard.service';
+import { ViewUserGuard } from './services/guards/view-user-guard.service';
+import { EditUserGuard } from './services/guards/edit-user-guard.service';
+import { ViewCandidateGuard } from './services/guards/view-candidate-guard.service';
+import { EditCandidateGuard } from './services/guards/edit-candidate-guard.service';
 
 
 @NgModule({
@@ -41,7 +46,8 @@ import { HeaderInterceptor } from './header.interceptor';
     DataTableComponent,
     DataTableFilterComponent,
     UserFormComponent,
-    CandidateFormComponent
+    CandidateFormComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -54,13 +60,14 @@ import { HeaderInterceptor } from './header.interceptor';
       { path: '', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
-      { path: 'users', component: UsersComponent, canActivate: [AuthGuard, UserAuthGuard] },
-      { path: 'users/new', component: UserFormComponent, canActivate: [AuthGuard, UserAuthGuard] },
+      { path: 'users', component: UsersComponent, canActivate: [AuthGuard, ViewUserGuard] },
+      { path: 'users/new', component: UserFormComponent, canActivate: [AuthGuard, EditUserGuard] },
       { path: 'users/:id', component: UserFormComponent, canActivate: [AuthGuard] },
-      { path: 'candidates', component: CandidatesComponent, canActivate: [AuthGuard] },
-      { path: 'candidates/new', component: CandidateFormComponent, canActivate: [AuthGuard] },
+      { path: 'candidates', component: CandidatesComponent, canActivate: [AuthGuard, ViewCandidateGuard] },
+      { path: 'candidates/new', component: CandidateFormComponent, canActivate: [AuthGuard, EditCandidateGuard] },
       { path: 'interviews', component: InterviewsComponent, canActivate: [AuthGuard] },
       { path: 'profile/edit', component: ProfileComponent, canActivate: [AuthGuard] },
+      { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
       { path: '**', component: LoginComponent } // change to 404 
     ]),
   ],
