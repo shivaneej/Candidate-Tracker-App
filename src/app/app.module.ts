@@ -63,7 +63,9 @@ import { EditCandidateGuard } from './services/guards/edit-candidate-guard.servi
       { path: 'users/:id', component: UserFormComponent, canActivate: [AuthGuard] },
       { path: 'candidates', component: CandidatesComponent, canActivate: [AuthGuard, ViewCandidateGuard] },
       { path: 'candidates/new', component: CandidateFormComponent, canActivate: [AuthGuard, EditCandidateGuard] },
+      { path: 'candidates/:id', component: CandidateProfileComponent, canActivate: [AuthGuard, EditCandidateGuard] },
       { path: 'interviews', component: InterviewsComponent, canActivate: [AuthGuard] },
+      { path: 'interviews/new', component: InterviewFormComponent, canActivate: [AuthGuard] },
       { path: 'profile/edit', component: ProfileComponent, canActivate: [AuthGuard] },
       { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
       { path: '**', component: LoginComponent } // change to 404 
