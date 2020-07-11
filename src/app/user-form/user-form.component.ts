@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { USER_PERMISSION } from '../services/guards/permissions';
+import { Role } from '../models/role';
 
 @Component({
   selector: 'app-user-form',
@@ -17,12 +18,12 @@ import { USER_PERMISSION } from '../services/guards/permissions';
 export class UserFormComponent implements OnInit {
 
   form;
-  roleOptions;
+  roleOptions : Role[];
   user;
-  selectedRole;
+  selectedRole : Role;
   options: any[] = [];
   filteredOptions: Observable<string[]>;
-  allRoles = [] ;
+  allRoles : Role[] = [] ;
   constructor( private builder: FormBuilder, 
     private usersService : UsersService,
     private router : Router, 
@@ -31,11 +32,19 @@ export class UserFormComponent implements OnInit {
     private snackBar: MatSnackBar ) { 
     
     this.user = this.authService.userLoggedIn();
-    this.roleService.rolesToDisplay(this.user.role).subscribe(roles => {
+    let currentRole = this.user.role;
+    let role : Role = new Role(currentRole.role, currentRole.roleString, currentRole.heirarchyLevel)
+    this.roleService.rolesToDisplay(role).subscribe(roles => {
       this.roleOptions = roles;
     });
-    this.roleService.getAll().subscribe(roles => {
-      this.allRoles = roles as any;
+    this.roleService.getAll().pipe(
+      map((roles : any) => {
+        return roles.map((role) => {
+            return new Role(role.role, role.roleString, role.heirarchyLevel)
+        })
+      }),
+    ).subscribe((roles : Role[]) => {
+      this.allRoles = roles;
     });
     let pattern = "^(\\+\\d{1,3}[- ]?)?0?[7-9]{1}\\d{9}$";
     this.form = builder.group({
@@ -63,25 +72,49 @@ export class UserFormComponent implements OnInit {
     return this.options.filter(option => option.email.toLowerCase().includes(filterValue));
   }
 
-  save() {
-    let processedFormData = this.processManagerData(this.form.value, this.options);
+  async save() {
+    let processedFormData = this.processManagerData(this.form.getRawValue(), this.options);
     if(processedFormData === null) {
       this.snackBar.open("Could not create user", "Dismiss", {
         duration: 2000,
       });
       return;
     }    
-    this.usersService.save(processedFormData);
-    this.router.navigateByUrl('/users');
+    let response : any = await this.usersService.save(processedFormData);
+    if(response.code !== 200){
+      let errorMessage = "Something went wrong";
+      switch(response.code) {
+        // TODO : Add error codes and messages
+        case 401 :
+          errorMessage = "Invalid credentials";
+          break;
+        case 403 : 
+          errorMessage = "Account disabled";
+          break;
+      }
+      this.snackBar.open(errorMessage, "Dismiss", {
+        duration: 2000,
+      });
+    } else {
+      this.snackBar.open("Successfully created user", "Dismiss", {
+        duration: 2000,
+      });
+      this.router.navigateByUrl('/users');
+    }
   }
 
   processManagerData(formData, options) {
-    let manager = options.filter(m => {
-      return m.email === formData.manager;
-    });
-    if(!manager[0]) return null;
     let processedFormData = Object.assign({}, formData);
-    processedFormData.manager = { id : manager[0].id };
+    if(!this.manager.disabled) {
+      let manager = options.filter(m => {
+        return m.email === formData.manager;
+      });
+      if(!manager[0]) return null;
+      processedFormData.manager = { id : manager[0].id };
+    } else {
+      processedFormData.manager = { id : this.user.id };
+    }
+    processedFormData.role = (processedFormData.role as Role).mapFields();
     return processedFormData;
   }
 
@@ -94,18 +127,18 @@ export class UserFormComponent implements OnInit {
       this.manager.enable();
       this.manager.reset();
       var selectedRoleParent = this.getRoleParent(this.selectedRole);
-      this.usersService.getByRole(selectedRoleParent.role).subscribe(options => {
+      this.usersService.getByRole(selectedRoleParent.id).subscribe(options => {
         this.options = options as any;
       });
     }
   }
 
-  getRoleParent(role) {
+  getRoleParent(role : Role) : Role {
     var ancestors = this.allRoles.filter(r => {
-      return  r.heirarchyLevel < role.heirarchyLevel
+      return  r.hierarchy < role.hierarchy
     });
     return ancestors.reduce((prev, current) => {
-      return (prev.heirarchyLevel > current.heirarchyLevel) ? prev : current
+      return (prev.hierarchy > current.hierarchy) ? prev : current
     });
   }
   
@@ -113,7 +146,7 @@ export class UserFormComponent implements OnInit {
     if(!USER_PERMISSION.writeManager.includes(this.user.role.roleString)) return false;
     if(this.selectedRole === undefined) return false;    
     var selectedRoleParent = this.getRoleParent(this.selectedRole);
-    return (this.user.role.heirarchyLevel !== selectedRoleParent.heirarchyLevel);
+    return (this.user.role.heirarchyLevel !== selectedRoleParent.hierarchy);
   }
   
   get firstName() {

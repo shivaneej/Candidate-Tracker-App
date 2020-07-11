@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import groupBy from '../helper';
 import { RoleService } from '../services/role.service';
 import { AuthService } from '../services/auth.service';
+import { Role } from '../models/role';
 
 @Component({
   selector: 'app-users',
@@ -14,7 +15,7 @@ import { AuthService } from '../services/auth.service';
 export class UsersComponent implements OnInit {
   dataLoading : boolean = false;
   usersByRole;
-  rolesToDisplay;
+  rolesToDisplay : Role[];
   columnHeader = { 'name': 'Name', 'email': 'Email', 'contact' : 'Contact' };
 
 
@@ -22,7 +23,8 @@ export class UsersComponent implements OnInit {
     private roleService : RoleService,
     private authService : AuthService) {
       let currentRole = this.authService.userLoggedIn().role; 
-      this.roleService.rolesToDisplay(currentRole).subscribe(roles => {
+      let role : Role = new Role(currentRole.role, currentRole.roleString, currentRole.heirarchyLevel)
+      this.roleService.rolesToDisplay(role).subscribe(roles => {
         this.rolesToDisplay = roles;
       });
   }
