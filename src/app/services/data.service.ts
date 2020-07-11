@@ -30,7 +30,7 @@ export class DataService {
     return new Promise((resolve, reject) => {
       // PUT request to server
       this.http.put<any>(this.url, resource).toPromise().then((response) => {
-        resolve({ code : 200});
+        resolve({ code : 200 , body : response });
       }).catch((error) => {
         resolve({ code : error.status, error : error.error});
       });

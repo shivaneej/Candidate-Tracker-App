@@ -43,6 +43,11 @@ export class AuthService {
     return token;
   }
 
+  updateUser(newUser: any) {
+    localStorage.setItem('user', JSON.stringify(newUser));
+    this.authStateChanged.next(newUser);
+  }
+
   logout() {
     localStorage.removeItem('user');
     localStorage.removeItem('token');

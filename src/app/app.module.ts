@@ -10,7 +10,6 @@ import { HeaderInterceptor } from './header.interceptor';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { ProfileComponent } from './profile/profile.component';
 import { CandidatesComponent } from './candidates/candidates.component';
 import { CandidateProfileComponent } from './candidate-profile/candidate-profile.component';
 import { InterviewFormComponent } from './interview-form/interview-form.component';
@@ -36,7 +35,6 @@ import { EditUserComponent } from './edit-user/edit-user.component';
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    ProfileComponent,
     CandidatesComponent,
     CandidateProfileComponent,
     InterviewFormComponent,

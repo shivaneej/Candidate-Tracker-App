@@ -85,12 +85,8 @@ export class UserFormComponent implements OnInit {
     if(response.code !== 200){
       let errorMessage = "Something went wrong";
       switch(response.code) {
-        // TODO : Add error codes and messages
-        case 401 :
-          errorMessage = "Invalid credentials";
-          break;
-        case 403 : 
-          errorMessage = "Account disabled";
+        case 409 :
+          errorMessage = "User already exists";
           break;
       }
       this.snackBar.open(errorMessage, "Dismiss", {

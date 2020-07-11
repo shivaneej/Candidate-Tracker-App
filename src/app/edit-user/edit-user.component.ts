@@ -64,18 +64,18 @@ export class EditUserComponent implements OnInit {
     if(response.code !== 200){
       let errorMessage = "Something went wrong";
       switch(response.code) {
-        // TODO : Add error codes and messages
-        case 401 :
-          errorMessage = "Invalid credentials";
-          break;
-        case 403 : 
-          errorMessage = "Account disabled";
+        case 404 :
+          errorMessage = "User does not exist";
           break;
       }
       this.snackbar.open(errorMessage, "Dismiss", {
         duration: 2000,
       });
     } else {
+      if(!this.subordinateProfile) {
+        let newUser = response.body;
+        this.authService.updateUser(newUser);
+      }
       this.snackbar.open("Successfully updated", "Dismiss", {
         duration: 2000,
       });
