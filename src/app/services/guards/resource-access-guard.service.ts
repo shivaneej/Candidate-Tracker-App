@@ -1,8 +1,6 @@
-import { Injectable } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { Router, RouterStateSnapshot } from '@angular/router';
 import { RoleService } from '../role.service';
-import { USER_PERMISSION } from './permissions';
 
 export class ResourceAccess {
 
@@ -13,7 +11,7 @@ export class ResourceAccess {
     private navigateUrl : string ) { }
 
   canActivate(route, state : RouterStateSnapshot) {
-    let role = this.auth.userLoggedIn().role;
+    let role = this.auth.userLoggedIn().role.roleString;
     if(this.allowedUsers.includes(role))
       return true;
     this.router.navigate([this.navigateUrl]);

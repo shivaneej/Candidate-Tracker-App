@@ -30,7 +30,7 @@ export class UserFormComponent implements OnInit {
     private snackBar: MatSnackBar ) { 
     
     this.user = this.authService.userLoggedIn();
-    this.roleOptions = this.roleService.rolesToDisplay(this.user.role);
+    this.roleOptions = this.roleService.rolesToDisplay(this.user.role.roleString);
     let pattern = "^(\\+\\d{1,3}[- ]?)?0?[7-9]{1}\\d{9}$";
     this.form = builder.group({
       firstName : ['', Validators.required],
@@ -94,8 +94,8 @@ export class UserFormComponent implements OnInit {
   }
   
   get canEditManager() {
-    if(!USER_PERMISSION.writeManager.includes(this.user.role)) return false;
-    let currentRoleIndex = this.roleService._roles.indexOf(this.user.role);
+    if(!USER_PERMISSION.writeManager.includes(this.user.role.roleString)) return false;
+    let currentRoleIndex = this.roleService._roles.indexOf(this.user.role.roleString);
     let selectedRoleIndex = this.roleService._roles.indexOf(this.selectedRole);
     return (selectedRoleIndex - currentRoleIndex) > 1 ;
   }

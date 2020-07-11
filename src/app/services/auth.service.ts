@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Subject, Observable, of } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,37 +13,39 @@ export class AuthService {
 
   login(email : string, password : string) {
     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // POST request to server with email and password
+      // POST request to server with email and password
+      let url = 'http://localhost:8080/authenticate'; 
+      let requestBody = {
+        username : email,
+        password : password
+      };
+      this.http.post<any>(url, requestBody).toPromise().then((response) => {
+        let token = 'Bearer '+ response.token;
+        localStorage.setItem('token', token);
 
-        // Get response from server
-        let validCredentials = (email === 'admin@wissen.com' && password === '123')
-        
-        // Check response and return
-        if(validCredentials) {
-          localStorage.setItem('email', email);
-          localStorage.setItem('role', 'Root');
-          this.authStateChanged.next({ email : email, role : 'Root'});
-          
-          // let token = 'Bearer '+ response.token;
-          // localStorage.setItem('token', token);
-        }
-        resolve(validCredentials);
-      }, 1000);
+        let user = response.user;
+        localStorage.setItem('user', JSON.stringify(user));
+        this.authStateChanged.next(user);
+        resolve({ code : 200});
+      }).catch((error) => {
+        resolve({ code : error.status});
+      });
     });
   }
 
   userLoggedIn() {
-    let userEmail = localStorage.getItem('email');
-    let userRole = localStorage.getItem('role');
-    if(userEmail && userRole)
-      return { email : userEmail, role : userRole };
-    return null;
+    let user = JSON.parse(localStorage.getItem('user'));
+    return user;
+  }
+
+  userToken() {
+    let token = localStorage.getItem('token');
+    return token;
   }
 
   logout() {
-    localStorage.removeItem('email');
-    localStorage.removeItem('role');
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     this.authStateChanged.next(null);
   }
 }

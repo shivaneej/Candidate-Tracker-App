@@ -40,11 +40,20 @@ export class LoginComponent implements OnInit {
 
   async login() {
     this.authPending = true;
-    let authStatus = await this.authService.login(this.email.value, this.password.value);
+    let authStatus : any = await this.authService.login(this.email.value, this.password.value);
     this.authPending = false;
-    if(!authStatus){
+    if(authStatus.code !== 200){
       this.formDirective.resetForm();
-      this.snackBar.open("Invalid credentials", "Dismiss", {
+      let errorMessage = "Something went wrong";
+      switch(authStatus.code) {
+        case 401 : 
+          errorMessage = "Invalid credentials";
+          break;
+        case 403 : 
+          errorMessage = "Account disabled";
+          break;
+      }
+      this.snackBar.open(errorMessage, "Dismiss", {
         duration: 2000,
       });
     } else {

@@ -16,15 +16,22 @@ export class UsersService extends DataService{
   getByRole(role : string) {
     let url = 'http://localhost:8080/users/role/' + role.toLowerCase();
     return this.http.get(url);
-    return of([ 
-      { id : 1, email : 'one@wissen.com'}, 
-      { id : 2, email : 'two@wissen.com'}, 
-      { id : 3, email : 'three@wissen.com' }]);
   }
 
   changePassword(oldPassword, newPassword) {
-    // POST request
-    console.log("Change password from " + oldPassword + " to " + newPassword);  
+    return new Promise((resolve, reject) => {
+      // POST request to server with email and password
+      let url = 'http://localhost:8080/users/password/';
+      let requestBody = {
+        oldPassword : oldPassword,
+        newPassword : newPassword
+      };
+      this.http.put<any>(url, requestBody).toPromise().then((response) => {
+        resolve({ code : 200});
+      }).catch((error) => {
+        resolve({ code : error.status, error : error.error});
+      });
+    });
   }
 }
 

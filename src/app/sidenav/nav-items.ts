@@ -5,32 +5,32 @@ export const navItemsList = [
       displayName: 'Dashboard',
       iconName: 'dashboard',
       route: '/dashboard',
-      endOfSection: false
+      startOfSection: false
     },
     {
       displayName: 'View Users',
       iconName: 'supervisor_account',
       route: '/users',
-      endOfSection: false,
+      startOfSection: false,
       canView: USER_PERMISSION.read
     },
     {
       displayName: 'View Candidates',
       iconName: 'people_alt',
       route: '/candidates',
-      endOfSection: true,
+      startOfSection: false,
       canView: CANDIDATE_PERMISSION.read
     },
     {
       displayName: 'Edit Profile',
       iconName: 'edit',
       route: '/profile/edit',
-      endOfSection: false
+      startOfSection: true
     },
     {
       displayName: 'Change Password',
       iconName: 'vpn_key',
       route: '/change-password',
-      endOfSection: true
+      startOfSection: false
     }
 ];

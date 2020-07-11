@@ -12,10 +12,10 @@
           <mat-card mat-list-item class="example-card">
             <mat-card-header>
               <div mat-card-avatar class="example-header-image"></div>
-              <mat-card-title>Name</mat-card-title>
+              <mat-card-title>{{ user.firstName + " " + user.lastName}}</mat-card-title>
               <mat-card-subtitle> 
                 {{ user.email }}
-                <mat-chip-list> <mat-chip color="accent" selected>{{ user.role }}</mat-chip> </mat-chip-list>
+                <mat-chip-list> <mat-chip color="accent" selected>{{ user.role.roleString }}</mat-chip> </mat-chip-list>
               </mat-card-subtitle>
               
             </mat-card-header>
@@ -23,13 +23,14 @@
 
           <mat-divider [inset]="true"></mat-divider>
           <ng-container *ngFor="let item of navItems">
+            <mat-divider  *ngIf="item.startOfSection"></mat-divider>
             <a mat-list-item class="menu-list-item" 
-              routerLink="{{ item.route }}" routerLinkActive="list-item-active" *ngIf="item.canView === undefined || item.canView.includes(user.role)">
+              routerLink="{{ item.route }}" routerLinkActive="list-item-active" *ngIf="item.canView === undefined || item.canView.includes(user.role.roleString)">
               <mat-icon class="route-icon">{{item.iconName}}</mat-icon>
               <span>{{item.displayName}}</span>
-              <mat-divider [inset]="true" *ngIf="item.endOfSection"></mat-divider>
             </a>
           </ng-container>
+          <mat-divider></mat-divider>
           <mat-list-item class="menu-list-item" (click)="logout()">
             <mat-icon class="route-icon">exit_to_app</mat-icon>
             <span>Logout</span>

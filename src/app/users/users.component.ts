@@ -21,7 +21,7 @@ export class UsersComponent implements OnInit {
   constructor(private usersService : UsersService, 
     private roleService : RoleService,
     private authService : AuthService) {
-      let currentRole = this.authService.userLoggedIn().role; 
+      let currentRole = this.authService.userLoggedIn().role.roleString; 
       this.rolesToDisplay = this.roleService.rolesToDisplay(currentRole);
   }
 

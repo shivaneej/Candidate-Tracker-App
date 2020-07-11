@@ -15,7 +15,6 @@ import { MatSidenav } from '@angular/material/sidenav';
 export class SidenavComponent implements OnDestroy {
 
   mobileQuery: MediaQueryList;
-  fillerNav = ['Dashboard', 'View Users', 'View Candidates', 'View Interviews', 'Edit Profile', 'Change Password', 'Logout'];
 
   user : any = {};
   @Input('title') title : string;
