@@ -28,6 +28,7 @@ import { ViewUserGuard } from './services/guards/view-user-guard.service';
 import { EditUserGuard } from './services/guards/edit-user-guard.service';
 import { ViewCandidateGuard } from './services/guards/view-candidate-guard.service';
 import { EditCandidateGuard } from './services/guards/edit-candidate-guard.service';
+import { EditUserComponent } from './edit-user/edit-user.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { EditCandidateGuard } from './services/guards/edit-candidate-guard.servi
     DataTableComponent,
     UserFormComponent,
     CandidateFormComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    EditUserComponent
   ],
   imports: [
     BrowserModule,
@@ -60,13 +62,13 @@ import { EditCandidateGuard } from './services/guards/edit-candidate-guard.servi
       { path: 'login', component: LoginComponent },
       { path: 'users', component: UsersComponent, canActivate: [AuthGuard, ViewUserGuard] },
       { path: 'users/new', component: UserFormComponent, canActivate: [AuthGuard, EditUserGuard] },
-      { path: 'users/:id', component: UserFormComponent, canActivate: [AuthGuard] },
+      { path: 'users/:id', component: EditUserComponent, canActivate: [AuthGuard] },
       { path: 'candidates', component: CandidatesComponent, canActivate: [AuthGuard, ViewCandidateGuard] },
       { path: 'candidates/new', component: CandidateFormComponent, canActivate: [AuthGuard, EditCandidateGuard] },
       { path: 'candidates/:id', component: CandidateProfileComponent, canActivate: [AuthGuard, EditCandidateGuard] },
       { path: 'interviews', component: InterviewsComponent, canActivate: [AuthGuard] },
       { path: 'interviews/new', component: InterviewFormComponent, canActivate: [AuthGuard] },
-      { path: 'profile/edit', component: ProfileComponent, canActivate: [AuthGuard] },
+      { path: 'profile/edit', component: EditUserComponent, canActivate: [AuthGuard] },
       { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
       { path: '**', component: LoginComponent } // change to 404 
     ]),

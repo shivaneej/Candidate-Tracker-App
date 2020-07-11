@@ -20,6 +20,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 
 
 
@@ -47,7 +49,8 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     MatAutocompleteModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    NgxMaterialTimepickerModule
+    NgxMaterialTimepickerModule,
+    MatSlideToggleModule
   ]
 })
 export class MaterialComponentsModule { }

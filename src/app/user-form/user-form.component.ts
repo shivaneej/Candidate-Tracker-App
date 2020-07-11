@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UsersService } from '../services/users.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { RoleService } from '../services/role.service';
 import { Observable } from 'rxjs';
@@ -9,6 +9,7 @@ import { startWith, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { USER_PERMISSION } from '../services/guards/permissions';
 import { Role } from '../models/role';
+import { SystemUser } from '../models/system-user';
 
 @Component({
   selector: 'app-user-form',
