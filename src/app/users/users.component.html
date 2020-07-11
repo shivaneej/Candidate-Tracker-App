@@ -5,9 +5,9 @@
   <div class="clear"></div>  
 </div>
 <mat-tab-group mat-stretch-tabs color="accent">
-  <mat-tab *ngFor="let role of rolesToDisplay" [label]="role">
+  <mat-tab *ngFor="let role of rolesToDisplay" [label]="role.roleString">
     <ng-template matTabContent>
-        <data-table [tableData]="usersByRole[role]" [columnHeader]="columnHeader" 
+        <data-table [tableData]="usersByRole[role.roleString]" [columnHeader]="columnHeader" 
         actionName="Edit" actionLinkPrefix="/users/"
         *ngIf="!dataLoading"></data-table>
         <mat-spinner color="accent" *ngIf="dataLoading"></mat-spinner>

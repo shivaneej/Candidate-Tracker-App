@@ -22,6 +22,7 @@ export class UserFormComponent implements OnInit {
   selectedRole;
   options: any[] = [];
   filteredOptions: Observable<string[]>;
+  allRoles = [] ;
   constructor( private builder: FormBuilder, 
     private usersService : UsersService,
     private router : Router, 
@@ -30,7 +31,12 @@ export class UserFormComponent implements OnInit {
     private snackBar: MatSnackBar ) { 
     
     this.user = this.authService.userLoggedIn();
-    this.roleOptions = this.roleService.rolesToDisplay(this.user.role.roleString);
+    this.roleService.rolesToDisplay(this.user.role).subscribe(roles => {
+      this.roleOptions = roles;
+    });
+    this.roleService.getAll().subscribe(roles => {
+      this.allRoles = roles as any;
+    });
     let pattern = "^(\\+\\d{1,3}[- ]?)?0?[7-9]{1}\\d{9}$";
     this.form = builder.group({
       firstName : ['', Validators.required],
@@ -75,7 +81,7 @@ export class UserFormComponent implements OnInit {
     });
     if(!manager[0]) return null;
     let processedFormData = Object.assign({}, formData);
-    processedFormData.manager = manager[0].id;
+    processedFormData.manager = { id : manager[0].id };
     return processedFormData;
   }
 
@@ -87,17 +93,27 @@ export class UserFormComponent implements OnInit {
     else {
       this.manager.enable();
       this.manager.reset();
-      this.usersService.getByRole(this.selectedRole).subscribe(options => {
+      var selectedRoleParent = this.getRoleParent(this.selectedRole);
+      this.usersService.getByRole(selectedRoleParent.role).subscribe(options => {
         this.options = options as any;
       });
     }
   }
+
+  getRoleParent(role) {
+    var ancestors = this.allRoles.filter(r => {
+      return  r.heirarchyLevel < role.heirarchyLevel
+    });
+    return ancestors.reduce((prev, current) => {
+      return (prev.heirarchyLevel > current.heirarchyLevel) ? prev : current
+    });
+  }
   
   get canEditManager() {
     if(!USER_PERMISSION.writeManager.includes(this.user.role.roleString)) return false;
-    let currentRoleIndex = this.roleService._roles.indexOf(this.user.role.roleString);
-    let selectedRoleIndex = this.roleService._roles.indexOf(this.selectedRole);
-    return (selectedRoleIndex - currentRoleIndex) > 1 ;
+    if(this.selectedRole === undefined) return false;    
+    var selectedRoleParent = this.getRoleParent(this.selectedRole);
+    return (this.user.role.heirarchyLevel !== selectedRoleParent.heirarchyLevel);
   }
   
   get firstName() {
