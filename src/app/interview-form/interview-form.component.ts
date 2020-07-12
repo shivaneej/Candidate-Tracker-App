@@ -7,6 +7,7 @@ import { startWith, map } from 'rxjs/operators';
 import { InterviewService } from '../services/interview.service';
 import { UsersService } from '../services/users.service';
 import { TimeValidator } from './time.validator';
+import { DateTimeHelper } from './datetime-helper';
 
 @Component({
   selector: 'app-interview-form',
@@ -72,6 +73,7 @@ export class InterviewFormComponent implements OnInit {
       });
       return;
     }    
+    console.log(processedFormData);
     this.interviewService.save(processedFormData);
     this.router.navigateByUrl('/dashboard');
   }
@@ -81,9 +83,11 @@ export class InterviewFormComponent implements OnInit {
       return i.email === formData.interviewer;
     });
     if(!interviewer[0]) return null;
-    let processedFormData = Object.assign({ candidate : this.candidate }, formData);
+    let processedFormData = Object.assign({ candidate : parseInt(this.candidate, 10) }, formData);
     processedFormData.interviewer = interviewer[0].id;
-    processedFormData.date = processedFormData.date.toDateString();
+    processedFormData.startTime = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.startTime);
+    processedFormData.endTime = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.endTime);
+    delete processedFormData.date;
     return processedFormData;
   }
 
