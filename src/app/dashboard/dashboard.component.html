@@ -1,1 +1,5 @@
-<p>dashboard works!</p>
+<mat-grid-list cols="3" rowHeight="250px">
+    <mat-grid-tile *ngFor="let data of dataList">
+        <dashboard-card [overall]='data.overall' [user]='data.user' [color]="data.color" [title]="data.title" [icon]="data.icon"></dashboard-card>
+    </mat-grid-tile>
+</mat-grid-list>

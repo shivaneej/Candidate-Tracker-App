@@ -1,0 +1,35 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{ title }}</mat-card-title>
+
+        <!-- <mat-form-field appearance="outline">
+            <mat-label>Duration</mat-label>
+            <mat-select>
+                <mat-option>7 days</mat-option>
+                <mat-option>30 days</mat-option>
+            </mat-select>
+        </mat-form-field> -->
+      
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content [style.backgroundColor]='color'>
+      <div>
+        <span class="stats-value" *ngIf="statsMode === 'overall'">{{ overall }}</span>
+        <span class="stats-value" *ngIf="statsMode === 'user'">{{ user }}</span>
+        <span class="stats-value">
+          <mat-icon>{{ icon }}</mat-icon>
+        </span>
+      </div>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-actions>
+        <mat-button-toggle-group #group="matButtonToggleGroup" [(value)]="statsMode">
+            <mat-button-toggle value="overall">
+              Overall
+            </mat-button-toggle>
+            <mat-button-toggle value="user">
+              My Stats
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+    </mat-card-actions>
+</mat-card>

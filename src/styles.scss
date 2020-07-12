@@ -68,8 +68,20 @@ div.mat-tab-body-content {
     button:not(.timepicker-dial__item) {
         color: $primary !important;
     }
-    
-    
+}
+
+mat-card {
+    mat-card-actions {
+        .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+            line-height: 40px!important;
+        }
+    }
+
+    mat-card-header {
+        .mat-card-header-text {
+            margin: 0 0px;
+        }
+    }
 }
 
 

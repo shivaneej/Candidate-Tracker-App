@@ -21,11 +21,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-
-
-
-
-
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
   exports: [
@@ -50,7 +47,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatDatepickerModule,
     MatNativeDateModule,
     NgxMaterialTimepickerModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatButtonToggleModule,
+    MatGridListModule
   ]
 })
 export class MaterialComponentsModule { }
