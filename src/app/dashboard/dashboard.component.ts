@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { VIEW_STATISTICS } from '../services/guards/permissions';
+import { STATISTICS_PERMISSION, INTERVIEW_PERMISSION } from '../services/guards/permissions';
 import { StatisticsService } from '../services/statistics.service';
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { InterviewService } from '../services/interview.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,9 +15,11 @@ export class DashboardComponent implements OnInit {
 
   dataListCache = [];
   dataToDisplay;
+  interviews;
   objectKeys = Object.keys; 
   user;
   showStatistics;
+  showInterviews;
   cardStyles = [
     { title: 'Candidates Hired', color: 'lightblue', icon : 'how_to_reg' },
     { title: 'Candidates Rejected', color: 'lightgreen', icon : 'person_remove' },
@@ -25,20 +28,27 @@ export class DashboardComponent implements OnInit {
   ]
   constructor(
     private authService : AuthService, 
-    private statsService : StatisticsService ) { }
+    private statsService : StatisticsService,
+    private interviewService : InterviewService ) { }
 
   ngOnInit(): void {
     this.user = this.authService.userLoggedIn();
-    this.showStatistics = VIEW_STATISTICS.read.includes(this.user.role.roleString);
-    this.fetchStatistics({ days : 7})
-    .subscribe(data => {
-      this.dataListCache.push(data);
-      this.dataToDisplay = this.dataListCache[0];
-    });
-    
+    this.showStatistics = STATISTICS_PERMISSION.read.includes(this.user.role.roleString);
+    this.showInterviews = INTERVIEW_PERMISSION.read.includes(this.user.role.roleString);
+    if(this.showStatistics)
+      this.fetchStatistics({ days : 7})
+      .subscribe(data => {
+        this.dataListCache.push(data);
+        this.dataToDisplay = this.dataListCache[0];
+      });
+    if(this.showInterviews)
+      this.interviewService.fetchInterviews().subscribe(interviews => {
+        this.interviews = interviews;
+        console.log(this.interviews);
+      });
   }
 
-  
+
   fetchStatistics(duration) {
     return combineLatest(
       this.statsService.getCandidatesHired(duration),

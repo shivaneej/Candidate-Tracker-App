@@ -1,11 +1,18 @@
-<mat-grid-list cols="3" rowHeight="250px">
-    <ng-container *ngIf="showStatistics">
-        <mat-grid-tile *ngFor="let data of objectKeys(dataToDisplay) | slice:1; let i = index;">
-            <statistics-card [stats]='dataToDisplay[data]' 
-                [color]="cardStyles[i].color" 
-                [title]="cardStyles[i].title" 
-                [icon]="cardStyles[i].icon">
-            </statistics-card>
-        </mat-grid-tile>
-    </ng-container>
+<mat-grid-list cols="3" rowHeight="250px" *ngIf="showStatistics">
+    <mat-grid-tile *ngFor="let data of objectKeys(dataToDisplay) | slice:1; let i = index;">
+        <statistics-card [stats]='dataToDisplay[data]' 
+            [color]="cardStyles[i].color" 
+            [title]="cardStyles[i].title" 
+            [icon]="cardStyles[i].icon">
+        </statistics-card>
+    </mat-grid-tile>
+</mat-grid-list>
+
+<mat-divider *ngIf="showInterviews && showStatistics"></mat-divider>
+
+<mat-grid-list cols="3" rowHeight="250px" *ngIf="showInterviews">
+    <mat-grid-tile *ngFor="let interview of interviews">
+        <interview-card [interview]="interview">
+        </interview-card>
+    </mat-grid-tile>
 </mat-grid-list>

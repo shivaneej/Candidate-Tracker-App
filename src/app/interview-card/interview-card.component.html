@@ -1,0 +1,46 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>Interview</mat-card-title>
+        <span>
+            <mat-chip-list> 
+                <mat-chip [style.backgroundColor]="statusColor" selected>
+                    {{ status }}
+                </mat-chip> 
+            </mat-chip-list>
+        </span>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div>
+        <table>
+            <tr>
+              <th>Date:</th>
+              <td>{{ interview.date }}</td>
+            </tr>
+            <tr>
+              <th>From:</th>
+              <td>{{ interview.start_time }}</td>
+            </tr>
+            <tr>
+              <th>To:</th>
+              <td>{{ interview.end_time }}</td>
+            </tr>
+          </table>
+          
+        <span class="stats-value">
+          <mat-icon>insert_invitation</mat-icon>
+        </span>
+      </div>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <!-- <mat-card-actions>
+        <mat-button-toggle-group #group="matButtonToggleGroup" [(value)]="statsMode">
+            <mat-button-toggle value="overall">
+              Overall
+            </mat-button-toggle>
+            <mat-button-toggle value="user">
+              My Stats
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+    </mat-card-actions> -->
+</mat-card>

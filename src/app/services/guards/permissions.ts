@@ -19,6 +19,6 @@ export const INTERVIEWER_SKILLS_PERMISSION = {
     write : ['Interviewer']
 }
 
-export const VIEW_STATISTICS = {
+export const STATISTICS_PERMISSION = {
     read : ['Root', 'Admin', 'OPS', 'Recruiter']
 }

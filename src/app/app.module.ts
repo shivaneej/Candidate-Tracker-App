@@ -29,6 +29,7 @@ import { ViewUserGuard } from './services/guards/view-user-guard.service';
 import { EditUserGuard } from './services/guards/edit-user-guard.service';
 import { ViewCandidateGuard } from './services/guards/view-candidate-guard.service';
 import { EditCandidateGuard } from './services/guards/edit-candidate-guard.service';
+import { InterviewCardComponent } from './interview-card/interview-card.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { EditCandidateGuard } from './services/guards/edit-candidate-guard.servi
     CandidateFormComponent,
     ChangePasswordComponent,
     EditUserComponent,
-    StatisticsCardComponent
+    StatisticsCardComponent,
+    InterviewCardComponent
   ],
   imports: [
     BrowserModule,
