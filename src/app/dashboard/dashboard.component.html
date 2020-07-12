@@ -1,5 +1,11 @@
 <mat-grid-list cols="3" rowHeight="250px">
-    <mat-grid-tile *ngFor="let data of dataList">
-        <dashboard-card [overall]='data.overall' [user]='data.user' [color]="data.color" [title]="data.title" [icon]="data.icon"></dashboard-card>
-    </mat-grid-tile>
+    <ng-container *ngIf="showStatistics">
+        <mat-grid-tile *ngFor="let data of objectKeys(dataToDisplay) | slice:1; let i = index;">
+            <statistics-card [stats]='dataToDisplay[data]' 
+                [color]="cardStyles[i].color" 
+                [title]="cardStyles[i].title" 
+                [icon]="cardStyles[i].icon">
+            </statistics-card>
+        </mat-grid-tile>
+    </ng-container>
 </mat-grid-list>

@@ -21,14 +21,14 @@ import { DataTableComponent } from './data-table/data-table.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { CandidateFormComponent } from './candidate-form/candidate-form.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
+import { EditUserComponent } from './edit-user/edit-user.component';
+import { StatisticsCardComponent } from './statistics-card/statistics-card.component';
 
 import { AuthGuard } from './services/guards/auth-guard.service';
 import { ViewUserGuard } from './services/guards/view-user-guard.service';
 import { EditUserGuard } from './services/guards/edit-user-guard.service';
 import { ViewCandidateGuard } from './services/guards/view-candidate-guard.service';
 import { EditCandidateGuard } from './services/guards/edit-candidate-guard.service';
-import { EditUserComponent } from './edit-user/edit-user.component';
-import { DashboardCardComponent } from './dashboard-card/dashboard-card.component';
 
 
 @NgModule({
@@ -47,7 +47,7 @@ import { DashboardCardComponent } from './dashboard-card/dashboard-card.componen
     CandidateFormComponent,
     ChangePasswordComponent,
     EditUserComponent,
-    DashboardCardComponent
+    StatisticsCardComponent
   ],
   imports: [
     BrowserModule,

@@ -14,8 +14,8 @@
     <mat-divider></mat-divider>
     <mat-card-content [style.backgroundColor]='color'>
       <div>
-        <span class="stats-value" *ngIf="statsMode === 'overall'">{{ overall }}</span>
-        <span class="stats-value" *ngIf="statsMode === 'user'">{{ user }}</span>
+        <span class="stats-value" *ngIf="statsMode === 'overall'">{{ stats.overall }}</span>
+        <span class="stats-value" *ngIf="statsMode === 'user'">{{ stats.user }}</span>
         <span class="stats-value">
           <mat-icon>{{ icon }}</mat-icon>
         </span>
