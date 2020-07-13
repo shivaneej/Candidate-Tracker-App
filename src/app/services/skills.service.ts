@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
+import { DataService } from './data.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SkillService {
+export class SkillService extends DataService {
 
-  constructor() { }
-
-  getAll() {
-    return ['Spring', 'Angular', 'Java', 'Python', 'Javascript', 'Perl'];
+  constructor(http : HttpClient) { 
+    let url = 'http://localhost:8080/skills';
+    super(url, http);
   }
 }

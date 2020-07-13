@@ -8,6 +8,12 @@ export class TimeValidator{
         var startTime = TimeValidator.convertToTime(start);
         var endTime = TimeValidator.convertToTime(end);
 
+        console.log(startTime);
+        console.log(endTime);
+        console.log(startTime.hours > endTime.hours);
+        console.log(startTime.hours === endTime.hours && startTime.minutes >= endTime.minutes);
+        
+
         if(startTime.hours > endTime.hours || (startTime.hours === endTime.hours && startTime.minutes >= endTime.minutes) )
             return { invalidDuration : true };
         return null;
@@ -22,6 +28,6 @@ export class TimeValidator{
         if (modifier === 'PM') {
           hours = (parseInt(hours, 10) + 12).toString();
         }
-        return { hours : hours, minutes : minutes };
+        return { hours : parseInt(hours,10), minutes : parseInt(minutes,10) };
     }
 }

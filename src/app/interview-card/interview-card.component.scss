@@ -3,7 +3,7 @@
     width: 100%;   
 }
 mat-card {
-    // max-width: 300px;
+
     margin: 2em;
 
     table {
@@ -22,6 +22,14 @@ mat-card {
                 border-radius: 4px;
             }
         }
+        div.button-group {
+            display: flexbox;
+            align-items: flex-end;
+            width: 100%;
+            button {
+                float: right;
+            }
+        }
     }
 
     .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
@@ -34,7 +42,7 @@ mat-card {
     }
 }
 
-div {
+div:not(.button-group) {
     padding: 2em;
     span.stats-value {
         font-size: xxx-large;

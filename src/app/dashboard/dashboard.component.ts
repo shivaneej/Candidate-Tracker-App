@@ -44,7 +44,6 @@ export class DashboardComponent implements OnInit {
     if(this.showInterviews)
       this.interviewService.fetchInterviews().subscribe(interviews => {
         this.interviews = interviews;
-        console.log(this.interviews);
       });
   }
 
