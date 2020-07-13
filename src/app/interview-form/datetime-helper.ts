@@ -11,6 +11,7 @@ export class DateTimeHelper {
         let dateTime = new Date(date);
         dateTime.setHours(hours);
         dateTime.setMinutes(parseInt(mins,10));
-        return dateTime;
+        var isoDateTime = new Date(dateTime.getTime() - (dateTime.getTimezoneOffset() * 60000)).toISOString();
+        return isoDateTime.slice(0, 19).replace('T', ' '); ;
     }
 }

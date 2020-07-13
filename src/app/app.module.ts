@@ -49,7 +49,7 @@ import { InterviewCardComponent } from './interview-card/interview-card.componen
     ChangePasswordComponent,
     EditUserComponent,
     StatisticsCardComponent,
-    InterviewCardComponent
+    InterviewCardComponent,
   ],
   imports: [
     BrowserModule,
