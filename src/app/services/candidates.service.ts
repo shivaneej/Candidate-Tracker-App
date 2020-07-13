@@ -1,13 +1,18 @@
+import { HttpClient } from '@angular/common/http';
+import { DataService } from './data.service';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CandidatesService {
+export class CandidatesService extends DataService{
 
-  constructor() { }
+  constructor(http : HttpClient) {
+      let url = "http://localhost:8080/candidates/";
+      super(url,http);
+   }
 
-  save(candidate, cv : File) {
+  saveCandidate(candidate, cv : File) {
     console.log("called save for candidate " + JSON.stringify(candidate) + "\n" + cv);
   }
 }

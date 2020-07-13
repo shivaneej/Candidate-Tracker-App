@@ -1,4 +1,7 @@
 <a mat-raised-button color="accent" routerLink="/candidates/new" class="button-right" appearance="outline"> 
     Create New Candidate 
 </a>
-<data-table [tableData]="candidates" [columnHeader]="columnHeader" actionName="View" actionLinkPrefix="/candidates/"></data-table>
+
+<mat-spinner color="accent" *ngIf="dataLoading"></mat-spinner>
+
+<data-table *ngIf="!dataLoading" [tableData]="candidates" [columnHeader]="columnHeader" actionName="View" actionLinkPrefix="/candidates/"></data-table>

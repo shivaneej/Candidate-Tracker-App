@@ -38,7 +38,7 @@ export class CandidateFormComponent implements OnInit {
   }
 
   save() {
-    this.candidatesService.save(this.form.value, this.selectedFile);
+    this.candidatesService.saveCandidate(this.form.value, this.selectedFile);
     this.router.navigateByUrl('/candidates');
   }
 
