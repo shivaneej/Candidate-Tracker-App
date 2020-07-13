@@ -30,6 +30,8 @@ import { EditUserGuard } from './services/guards/edit-user-guard.service';
 import { ViewCandidateGuard } from './services/guards/view-candidate-guard.service';
 import { EditCandidateGuard } from './services/guards/edit-candidate-guard.service';
 import { InterviewCardComponent } from './interview-card/interview-card.component';
+import { RescheduleComponent } from './interview-form/reschedule/reschedule.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 
 @NgModule({
@@ -50,6 +52,8 @@ import { InterviewCardComponent } from './interview-card/interview-card.componen
     EditUserComponent,
     StatisticsCardComponent,
     InterviewCardComponent,
+    RescheduleComponent,
+    FeedbackComponent,
   ],
   imports: [
     BrowserModule,
@@ -80,6 +84,10 @@ import { InterviewCardComponent } from './interview-card/interview-card.componen
     useClass: HeaderInterceptor,
     multi: true,
   }
+  ],
+  entryComponents: [
+    FeedbackComponent,
+    RescheduleComponent
   ],
   bootstrap: [AppComponent]
 })

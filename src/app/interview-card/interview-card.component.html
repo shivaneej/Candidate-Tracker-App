@@ -33,14 +33,9 @@
       </div>
     </mat-card-content>
     <mat-divider></mat-divider>
-    <!-- <mat-card-actions>
-        <mat-button-toggle-group #group="matButtonToggleGroup" [(value)]="statsMode">
-            <mat-button-toggle value="overall">
-              Overall
-            </mat-button-toggle>
-            <mat-button-toggle value="user">
-              My Stats
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-    </mat-card-actions> -->
+    <mat-card-actions>
+          <button [style.visibility]="showAction == 2 ? 'visible' : 'hidden'" mat-button color="accent">Accept</button>
+          <button (click)="openDialog(1)" [style.visibility]="showAction == 2 ? 'visible' : 'hidden'" mat-button color="accent">Reschedule</button>
+          <button (click)="openDialog(2)" [style.visibility]="showAction == 1 ? 'visible' : 'hidden'" mat-button color="accent">Give Feedback</button>
+    </mat-card-actions>
 </mat-card>
