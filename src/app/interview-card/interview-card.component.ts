@@ -80,6 +80,12 @@ export class InterviewCardComponent implements OnInit {
     }
   }
 
+  accept() {
+    //Method to accept 
+    this.snackbar.open("Interview confirmed", "Dismiss", {
+      duration: 2000,
+    });
+  }
   reschedule(formData) {
     console.log("Save " + JSON.stringify(formData));
     if(formData !== null) {
