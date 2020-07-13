@@ -109,7 +109,7 @@ export class CandidateFormComponent implements OnInit {
     .map(skill => skill.mapFields());
     let processedFormData = Object.assign({}, this.form.value);
     processedFormData.skills = selectedSkills;
-    this.candidatesService.save(processedFormData, this.selectedFile);
+    this.candidatesService.saveCandidate(processedFormData, this.selectedFile);
     this.router.navigateByUrl('/candidates');
   }
 
