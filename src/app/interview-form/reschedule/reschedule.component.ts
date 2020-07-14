@@ -25,10 +25,10 @@ export class RescheduleComponent {
     private builder: FormBuilder ) { 
       this.interview = {...data};
 
-      let dateObject = new Date(this.interview.start_time);
+      let dateObject = new Date(this.interview.startTime);
       this.ogDate = dateObject.toDateString();
       this.ogStartTime = dateObject.toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
-      this.ogEndTime = new Date(this.interview.end_time).toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
+      this.ogEndTime = new Date(this.interview.endTime).toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
 
 
 
