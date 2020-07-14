@@ -40,7 +40,7 @@ export class InterviewFormComponent implements OnInit {
     max.setMonth(new Date().getMonth() + 1);
     this.minDate = min;
     this.maxDate = max;
-    this.usersService.getByRole('interviewer').subscribe(options => {
+    this.usersService.getInterviewers().subscribe(options => {
       this.options = options as any;
     });
     this.candidate = this.route.snapshot.queryParamMap.get('candidate');

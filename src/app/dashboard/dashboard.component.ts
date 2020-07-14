@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
         this.dataToDisplay = this.dataListCache[0];
       });
     if(this.showInterviews)
-      this.interviewService.fetchInterviews().subscribe(interviews => {
+      this.interviewService.getAll().subscribe(interviews => {
         this.interviews = interviews;
       });
   }

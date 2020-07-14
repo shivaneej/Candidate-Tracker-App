@@ -46,19 +46,20 @@ export class InterviewCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let dateObject = new Date(this.interview.start_time);
+    let dateObject = new Date(this.interview.startTime);
+    console.log(dateObject);
     this.date = dateObject.toDateString();
     this.startTime = dateObject.toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
-    this.endTime = new Date(this.interview.end_time).toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
+    this.endTime = new Date(this.interview.endTime).toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
     let otherUser = (this.currentUser === 'Interviewer') ? 'Recruiter' : 'Interviewer';
 
-    let status = this.interview.status as string;
-    if(status.startsWith('BOTH')) { // Both have approved - option to update feedback AFTER endtime
+    let status = this.interview.approvalStatus as string;
+    if(status.startsWith('both')) { // Both have approved - option to update feedback AFTER endtime
       this.status = InterviewStatus.Confirmed.message;
       this.statusColor = InterviewStatus.Confirmed.color;
       let endTimeObj = new Date(this.interview.end_time);
       this.showAction = (this.currentUser === 'Interviewer' && (new Date()).valueOf() > endTimeObj.valueOf()) ? Footer.Feedback : Footer.None ;
-    } else if(status.startsWith(otherUser.toUpperCase())) { // Show accept/reschedule button
+    } else if(status.startsWith(otherUser.toLowerCase())) { // Show accept/reschedule button
       this.status = InterviewStatus.New.message;
       this.statusColor = InterviewStatus.New.color;
       this.showAction = Footer.Actions ;
