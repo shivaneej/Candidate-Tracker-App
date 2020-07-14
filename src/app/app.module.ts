@@ -72,6 +72,7 @@ import { FeedbackComponent } from './feedback/feedback.component';
       { path: 'candidates', component: CandidatesComponent, canActivate: [AuthGuard, ViewCandidateGuard] },
       { path: 'candidates/new', component: CandidateFormComponent, canActivate: [AuthGuard, EditCandidateGuard] },
       { path: 'candidates/:id', component: CandidateProfileComponent, canActivate: [AuthGuard, EditCandidateGuard] },
+      { path: 'candidates/:id/edit', component: CandidateFormComponent, canActivate: [AuthGuard, EditCandidateGuard] },
       { path: 'interviews', component: InterviewsComponent, canActivate: [AuthGuard] },
       { path: 'interviews/new', component: InterviewFormComponent, canActivate: [AuthGuard] },
       { path: 'profile/edit', component: EditUserComponent, canActivate: [AuthGuard] },

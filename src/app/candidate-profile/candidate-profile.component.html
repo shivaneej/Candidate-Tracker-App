@@ -1,6 +1,6 @@
 <mat-spinner color="accent" *ngIf="dataLoading"></mat-spinner>
 <div *ngIf="dataLoading == false">
-    <mat-card class="profile-header" [ngStyle]="{ 'background-color' : (status === 'hired') ? '#cbff96' : ((status === 'rejected' ? '#ffd6e0' : '#c8e0dd')) }">
+    <mat-card class="profile-header" [ngStyle]="{ 'background-color' : (status === 'hired') ? '#8BC34A' : ((status === 'rejected' ? '#F44336' : '#FFC107')) }">
         <mat-card-title>
             <h2>
                 {{ candidate.firstName + " " + candidate.lastName}}
@@ -30,7 +30,12 @@
     <mat-card class="profile-details">
         <mat-card class="personal-profile">
             <mat-card-title class="card-title">
-                Profile
+                <div class="row">
+                    Profile
+                    <a mat-stroked-button color="primary" routerLink="edit" class="button-right angular-button" appearance="outline"> 
+                        Edit Profile
+                    </a>
+                </div>
             </mat-card-title>
             <mat-divider></mat-divider>
             <mat-card-content class="card-content">

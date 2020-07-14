@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CandidatesService } from '../services/candidates.service';
 import { SkillService } from '../services/skills.service';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
@@ -9,6 +9,8 @@ import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { Observable } from 'rxjs';
 import { Skill } from '../models/skill';
 import { startWith, map } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -29,29 +31,59 @@ export class CandidateFormComponent implements OnInit {
 
   allSkills : Skill[] = [];
 
+  candidateId;
+  candidateData;
+
+
 
   constructor(private builder: FormBuilder, 
     private candidatesService : CandidatesService,
     private router : Router,
-    private skillService : SkillService ) { 
-    let pattern = "^(\\+\\d{1,3}[- ]?)?0?[7-9]{1}\\d{9}$";
-    this.form = builder.group({
-      firstName : ['', Validators.required],
-      lastName : ['', Validators.required],
-      email : ['', [ Validators.required, Validators.email]],
-      contact : ['', [Validators.required, Validators.pattern(pattern)]],
-      address : ['', Validators.required],
-      preferredLoc : ['', Validators.required],
-      ectc : ['', [Validators.required, Validators.min(0)]],
-      ctct : ['', [Validators.required, Validators.min(0)]],
-      source : ['', Validators.required],
-      fileInput : ['', Validators.required],
-      skills : ['']
-    });
+    private skillService : SkillService,
+    private snackBar : MatSnackBar,
+    private authService : AuthService,
+    private route : ActivatedRoute ) { 
+      let pattern = "^(\\+\\d{1,3}[- ]?)?0?[7-9]{1}\\d{9}$";
+      this.form = builder.group({
+        firstName : ['', Validators.required],
+        lastName : ['', Validators.required],
+        email : ['', [ Validators.required, Validators.email]],
+        contact : ['', [Validators.required, Validators.pattern(pattern)]],
+        address : ['', Validators.required],
+        preferredLoc : ['', Validators.required],
+        ectc : ['', [Validators.required, Validators.min(0)]],
+        ctct : ['', [Validators.required, Validators.min(0)]],
+        source : ['', Validators.required],
+        fileInput : ['', Validators.required],
+        skills : ['']
+      });    
   }
 
 
   ngOnInit(): void {
+    this.candidateId = this.route.snapshot.paramMap.get("id");
+      if(this.candidateId !== null) {
+        this.candidatesService.getById(this.candidateId)
+        .subscribe((candidate) => {
+            this.candidateData = candidate as any;
+            console.log(this.candidateData);
+            this.form.setValue({
+              firstName : this.candidateData.firstName, 
+              lastName : this.candidateData.lastName,
+              contact : this.candidateData.contact,
+              email : this.candidateData.email,
+              address : this.candidateData.address,
+              preferredLoc : this.candidateData.preferredLoc,
+              ectc : this.candidateData.ectc,
+              ctct : this.candidateData.ctct,
+              source : this.candidateData.source,
+              fileInput : '',
+              skills : ''
+            });
+            this.selectedSkills = this.candidateData.skillSet.map(skill => skill.skillName);
+        });
+      }
+
     this.filteredSkills = this.skills.valueChanges
     .pipe(
       startWith(null),
@@ -104,13 +136,35 @@ export class CandidateFormComponent implements OnInit {
     this.selectedFile = event.target.files[0];
   }
 
-  save() {
+  async save() {
     let selectedSkills = (this.allSkills.filter(skill => this.selectedSkills.includes(skill.name)))
     .map(skill => skill.mapFields());
     let processedFormData = Object.assign({}, this.form.value);
     processedFormData.skills = selectedSkills;
-    this.candidatesService.saveCandidate(processedFormData, this.selectedFile);
-    this.router.navigateByUrl('/candidates');
+    let response : any;
+    if(this.candidateId === null) {
+      processedFormData.recruiter = { id : this.authService.userLoggedIn().id };
+      // this.candidatesService.saveCandidate(processedFormData, this.selectedFile);
+      response = await this.candidatesService.save(processedFormData); 
+    } else 
+      response = await this.candidatesService.update(processedFormData);
+    // TODO : Replace error codes and messages
+    if(response.code !== 200){
+      let errorMessage = "Something went wrong";
+      switch(response.code) {
+        case 409 :
+          errorMessage = "Candidate already exists";
+          break;
+      }
+      this.snackBar.open(errorMessage, "Dismiss", {
+        duration: 2000,
+      });
+    } else {
+      this.snackBar.open("Successfully saved candidate", "Dismiss", {
+        duration: 2000,
+      });
+      this.router.navigateByUrl('/candidates');
+    }
   }
 
   get firstName() {

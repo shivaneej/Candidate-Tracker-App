@@ -7,13 +7,6 @@ export class TimeValidator{
 
         var startTime = TimeValidator.convertToTime(start);
         var endTime = TimeValidator.convertToTime(end);
-
-        console.log(startTime);
-        console.log(endTime);
-        console.log(startTime.hours > endTime.hours);
-        console.log(startTime.hours === endTime.hours && startTime.minutes >= endTime.minutes);
-        
-
         if(startTime.hours > endTime.hours || (startTime.hours === endTime.hours && startTime.minutes >= endTime.minutes) )
             return { invalidDuration : true };
         return null;
