@@ -61,11 +61,9 @@ export class RescheduleComponent {
 
   processInterviewData(formData) {
     let processedFormData = Object.assign( this.interview , formData);
-    processedFormData.start_time = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.startTime);
-    processedFormData.end_time = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.endTime);
+    processedFormData.startTime = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.startTime);
+    processedFormData.endTime = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.endTime);
     delete processedFormData.date;
-    delete processedFormData.startTime;
-    delete processedFormData.endTime;
     return processedFormData;
   }
 

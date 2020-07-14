@@ -18,7 +18,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -50,6 +50,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatSlideToggleModule,
     MatButtonToggleModule,
     MatGridListModule
+  ],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'en-IN' }
   ]
 })
 export class MaterialComponentsModule { }

@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { RescheduleComponent } from '../interview-form/reschedule/reschedule.component';
 import { FeedbackComponent } from '../feedback/feedback.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { InterviewService } from '../services/interview.service';
 
 enum Footer {
   None,
@@ -26,12 +27,13 @@ export class InterviewCardComponent implements OnInit {
   startTime;
   endTime;
   showAction : Footer ;
-  constructor(public dialog: MatDialog, private snackbar : MatSnackBar) { }
+  constructor(public dialog: MatDialog, private snackbar : MatSnackBar, private interviewService : InterviewService) { }
 
   openDialog(value : number) {
     let dialogRef;
-    if(value === 1)
+    if(value === 1) {
       dialogRef = this.dialog.open(RescheduleComponent, { data : this.interview });
+    }
     else if(value === 2)
       dialogRef = this.dialog.open(FeedbackComponent, { data : this.interview });
     
@@ -47,7 +49,6 @@ export class InterviewCardComponent implements OnInit {
 
   ngOnInit(): void {
     let dateObject = new Date(this.interview.startTime);
-    console.log(dateObject);
     this.date = dateObject.toDateString();
     this.startTime = dateObject.toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
     this.endTime = new Date(this.interview.endTime).toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
@@ -57,7 +58,7 @@ export class InterviewCardComponent implements OnInit {
     if(status.startsWith('both')) { // Both have approved - option to update feedback AFTER endtime
       this.status = InterviewStatus.Confirmed.message;
       this.statusColor = InterviewStatus.Confirmed.color;
-      let endTimeObj = new Date(this.interview.end_time);
+      let endTimeObj = new Date(this.interview.endTime);
       this.showAction = (this.currentUser === 'Interviewer' && (new Date()).valueOf() > endTimeObj.valueOf()) ? Footer.Feedback : Footer.None ;
     } else if(status.startsWith(otherUser.toLowerCase())) { // Show accept/reschedule button
       this.status = InterviewStatus.New.message;
@@ -70,31 +71,57 @@ export class InterviewCardComponent implements OnInit {
     }
   }
 
-  saveFeedback(formData) {
-    console.log("Save " + JSON.stringify(formData));
+  async saveFeedback(formData) {
     if(formData !== null) {
-      // Method to update feedback
-      // this.interviewService.save(processedFormData);
-      this.snackbar.open("Feedback saved!", "Dismiss", {
-        duration: 2000,
-      });
+      let response : any = await this.interviewService.updateInterview(formData, 2);
+      if(response.code !== 200) {
+        this.snackbar.open("Could not update feedback", "Dismiss", {
+          duration: 2000,
+        });
+      } else {
+        this.snackbar.open("Successfully updated feedback", "Dismiss", {
+          duration: 2000,
+        });
+        this.interview = formData;
+      }
     }
   }
 
-  accept() {
-    //Method to accept 
-    this.snackbar.open("Interview confirmed", "Dismiss", {
-      duration: 2000,
-    });
-  }
-  reschedule(formData) {
-    console.log("Save " + JSON.stringify(formData));
+  async reschedule(formData) {
     if(formData !== null) {
-      // Method to update feedback
-      // this.interviewService.save(processedFormData);
-      this.snackbar.open("Reschedule requested", "Dismiss", {
+      let response : any = await this.interviewService.updateInterview(formData, 1);
+      if(response.code !== 200) {
+        this.snackbar.open("Could not reschedule the interview", "Dismiss", {
+          duration: 2000,
+        });
+      } else {
+        this.snackbar.open("Successfully rescheduled the interview", "Dismiss", {
+          duration: 2000,
+        });
+        this.interview = response.body;
+        let dateObject = new Date(this.interview.startTime);
+        this.date = dateObject.toDateString();
+        this.startTime = dateObject.toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
+        this.endTime = new Date(this.interview.endTime).toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
+      }
+    }
+  }
+
+  async accept() {
+    let response : any = await this.interviewService.accept(this.interview.interviewId);
+    if(response.code !== 200) {
+      this.snackbar.open("Could not accept interview", "Dismiss", {
         duration: 2000,
       });
+    } else {
+      this.snackbar.open("Successfully accepted the interview", "Dismiss", {
+        duration: 2000,
+      });
+      this.interview.approvalStatus = 'both_approved';
+      this.status = InterviewStatus.Confirmed.message;
+      this.statusColor = InterviewStatus.Confirmed.color;
+      let endTimeObj = new Date(this.interview.endTime);
+      this.showAction = (this.currentUser === 'Interviewer' && (new Date()).valueOf() > endTimeObj.valueOf()) ? Footer.Feedback : Footer.None ;
     }
   }
 }
