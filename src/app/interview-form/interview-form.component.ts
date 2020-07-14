@@ -83,8 +83,8 @@ export class InterviewFormComponent implements OnInit {
       return i.email === formData.interviewer;
     });
     if(!interviewer[0]) return null;
-    let processedFormData = Object.assign({ candidate : parseInt(this.candidate, 10) }, formData);
-    processedFormData.interviewer = interviewer[0].id;
+    let processedFormData = Object.assign({ candidate : { id : parseInt(this.candidate, 10) }}, formData);
+    processedFormData.interviewer = { id : interviewer[0].id } ;
     processedFormData.startTime = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.startTime);
     processedFormData.endTime = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.endTime);
     delete processedFormData.date;
