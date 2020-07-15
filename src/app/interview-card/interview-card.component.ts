@@ -48,27 +48,43 @@ export class InterviewCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.updateDate();
+    let otherUser = (this.currentUser === 'Interviewer') ? 'Recruiter' : 'Interviewer';
+
+    let status = this.interview.approvalStatus as string;
+    if(status.startsWith('both')) { 
+      this.setStatusAsConfirmed();
+    } else if(status.startsWith(otherUser.toLowerCase())) { 
+      this.setStatusAsNew();
+    } else { 
+      this.setStatusAsPending();
+    }
+  }
+
+  setStatusAsConfirmed() { // Both have approved - option to update feedback AFTER endtime
+    this.status = InterviewStatus.Confirmed.message;
+    this.statusColor = InterviewStatus.Confirmed.color;
+    let endTimeObj = new Date(this.interview.endTime);
+    this.showAction = (this.currentUser === 'Interviewer' && (new Date()).valueOf() > endTimeObj.valueOf()) ? Footer.Feedback : Footer.None ;
+  }
+
+  setStatusAsNew() { // Show accept/reschedule button
+    this.status = InterviewStatus.New.message;
+    this.statusColor = InterviewStatus.New.color;
+    this.showAction = Footer.Actions ;
+  }
+
+  setStatusAsPending() { // Show no action
+    this.status = InterviewStatus.Pending.message;
+    this.statusColor = InterviewStatus.Pending.color;
+    this.showAction = Footer.None ;
+  }
+
+  updateDate() { // Update start and end time in required format
     let dateObject = new Date(this.interview.startTime);
     this.date = dateObject.toDateString();
     this.startTime = dateObject.toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
     this.endTime = new Date(this.interview.endTime).toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
-    let otherUser = (this.currentUser === 'Interviewer') ? 'Recruiter' : 'Interviewer';
-
-    let status = this.interview.approvalStatus as string;
-    if(status.startsWith('both')) { // Both have approved - option to update feedback AFTER endtime
-      this.status = InterviewStatus.Confirmed.message;
-      this.statusColor = InterviewStatus.Confirmed.color;
-      let endTimeObj = new Date(this.interview.endTime);
-      this.showAction = (this.currentUser === 'Interviewer' && (new Date()).valueOf() > endTimeObj.valueOf()) ? Footer.Feedback : Footer.None ;
-    } else if(status.startsWith(otherUser.toLowerCase())) { // Show accept/reschedule button
-      this.status = InterviewStatus.New.message;
-      this.statusColor = InterviewStatus.New.color;
-      this.showAction = Footer.Actions ;
-    } else { // Show no action
-      this.status = InterviewStatus.Pending.message;
-      this.statusColor = InterviewStatus.Pending.color;
-      this.showAction = Footer.None ;
-    }
   }
 
   async saveFeedback(formData) {
@@ -99,10 +115,8 @@ export class InterviewCardComponent implements OnInit {
           duration: 2000,
         });
         this.interview = response.body;
-        let dateObject = new Date(this.interview.startTime);
-        this.date = dateObject.toDateString();
-        this.startTime = dateObject.toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
-        this.endTime = new Date(this.interview.endTime).toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
+        this.setStatusAsPending();
+        this.updateDate();
       }
     }
   }
@@ -117,11 +131,8 @@ export class InterviewCardComponent implements OnInit {
       this.snackbar.open("Successfully accepted the interview", "Dismiss", {
         duration: 2000,
       });
-      this.interview.approvalStatus = 'both_approved';
-      this.status = InterviewStatus.Confirmed.message;
-      this.statusColor = InterviewStatus.Confirmed.color;
-      let endTimeObj = new Date(this.interview.endTime);
-      this.showAction = (this.currentUser === 'Interviewer' && (new Date()).valueOf() > endTimeObj.valueOf()) ? Footer.Feedback : Footer.None ;
+      this.interview = response.body;
+      this.setStatusAsConfirmed();
     }
   }
 }
