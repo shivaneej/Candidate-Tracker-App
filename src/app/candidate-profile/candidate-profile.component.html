@@ -1,4 +1,5 @@
 <mat-spinner color="accent" *ngIf="dataLoading"></mat-spinner>
+<a routerLink=''></a> <!-- Prevent scrollbar in dialog to automatically scroll to the bottom -->
 <div *ngIf="dataLoading == false">
     <mat-card class="profile-header" [ngStyle]="{ 'background-color' : (status === 'hired') ? '#8BC34A' : ((status === 'rejected' ? '#F44336' : '#FFC107')) }">
         <mat-card-title>
@@ -11,7 +12,7 @@
                 {{candidate.email}}
             </h4>
         </mat-card-subtitle>
-        <div class="row" *ngIf="status == 'ready' || status == 'hold'">
+        <div class="row" *ngIf="(status == 'ready' || status == 'hold') && data === null">
             <a mat-raised-button color="accent" *ngIf="status === 'ready'" routerLink="/interviews/new" [queryParams]="{candidate: candidateId}" class="button-right angular-button" appearance="outline"> 
                 Schedule Interview
             </a>
@@ -32,7 +33,8 @@
             <mat-card-title class="card-title">
                 <div class="row">
                     Profile
-                    <a mat-stroked-button color="primary" routerLink="edit" class="button-right angular-button" appearance="outline"> 
+                    <a mat-stroked-button color="primary" routerLink="edit" class="button-right angular-button" 
+                     appearance="outline" *ngIf="data === null"> 
                         Edit Profile
                     </a>
                 </div>

@@ -5,6 +5,7 @@ import { RescheduleComponent } from '../interview-form/reschedule/reschedule.com
 import { FeedbackComponent } from '../feedback/feedback.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { InterviewService } from '../services/interview.service';
+import { CandidateProfileComponent } from '../candidate-profile/candidate-profile.component';
 
 enum Footer {
   None,
@@ -27,6 +28,9 @@ export class InterviewCardComponent implements OnInit {
   startTime;
   endTime;
   showAction : Footer ;
+  candidate;
+  candidateId;
+  interviewer;
   constructor(public dialog: MatDialog, private snackbar : MatSnackBar, private interviewService : InterviewService) { }
 
   openDialog(value : number) {
@@ -36,6 +40,8 @@ export class InterviewCardComponent implements OnInit {
     }
     else if(value === 2)
       dialogRef = this.dialog.open(FeedbackComponent, { data : this.interview });
+    else if(value === 3)
+      dialogRef = this.dialog.open(CandidateProfileComponent, { width : '1000px', height:'500px', data : this.candidateId });
     
 
     dialogRef.afterClosed().subscribe(result => {
@@ -48,6 +54,10 @@ export class InterviewCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.interview);
+    this.candidate = this.interview.candidate.firstName + " " + this.interview.candidate.lastName;
+    this.candidateId = this.interview.candidate.id;
+    this.interviewer = this.interview.interviewer.firstName + " " + this.interview.interviewer.lastName;
     this.updateDate();
     let otherUser = (this.currentUser === 'Interviewer') ? 'Recruiter' : 'Interviewer';
 

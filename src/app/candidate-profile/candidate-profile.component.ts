@@ -1,7 +1,8 @@
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CandidateProfileService } from './../services/candidate-profile.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-candidate-profile',
@@ -17,15 +18,17 @@ export class CandidateProfileComponent implements OnInit {
   dataLoading : boolean = false;
 
   candidateId;
-  constructor(private route: ActivatedRoute,
-    private router : Router,
-      private candidateProfileService : CandidateProfileService,
-      private snackBar : MatSnackBar){
+  constructor(private route: ActivatedRoute, private router : Router,
+    private candidateProfileService : CandidateProfileService, private snackBar : MatSnackBar, 
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any, @Optional() public dialogRef: MatDialogRef<CandidateProfileComponent>,){
   }
 
   ngOnInit(): void {
     this.dataLoading = true;
     this.candidateId = this.route.snapshot.paramMap.get("id");
+    if(this.data !== null) {
+      this.candidateId = this.data; 
+    }
     this.candidateProfileService.getById(this.candidateId).subscribe((candidate : any) => {
       this.candidate = candidate;
       this.status = candidate.status;
@@ -63,6 +66,10 @@ export class CandidateProfileComponent implements OnInit {
         duration : 3000
       });
     }
+  }
+
+  closeDialog(){
+    this.dialogRef.close({event: 'Cancel'});
   }
 
 }

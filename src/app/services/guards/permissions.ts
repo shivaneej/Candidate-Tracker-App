@@ -9,6 +9,11 @@ export const CANDIDATE_PERMISSION = {
     write : ['Admin', 'Recruiter']
 }
 
+export const CANDIDATE_PROFILE_PERMISSION = {
+    read : ['Admin', 'Recruiter'],
+    write : ['Admin', 'Recruiter']
+}
+
 export const INTERVIEW_PERMISSION = {
     read : ['Recruiter', 'Interviewer'],
     write : ['Recruiter', 'Interviewer']

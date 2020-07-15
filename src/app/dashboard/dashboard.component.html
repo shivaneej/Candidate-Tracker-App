@@ -10,7 +10,7 @@
 
 <mat-divider *ngIf="showInterviews && showStatistics"></mat-divider>
 
-<mat-grid-list cols="3" rowHeight="300px" *ngIf="showInterviews">
+<mat-grid-list cols="3" rowHeight="400px" *ngIf="showInterviews">
     <mat-grid-tile *ngFor="let interview of interviews">
         <interview-card [interview]="interview" [currentUser]="user.role.roleString">
         </interview-card>

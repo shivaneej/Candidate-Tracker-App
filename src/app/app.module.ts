@@ -32,6 +32,7 @@ import { EditCandidateGuard } from './services/guards/edit-candidate-guard.servi
 import { InterviewCardComponent } from './interview-card/interview-card.component';
 import { RescheduleComponent } from './interview-form/reschedule/reschedule.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { ViewCandidateProfileGuard } from './services/guards/view-candidate-profile-guard.service';
 
 
 @NgModule({
@@ -71,7 +72,7 @@ import { FeedbackComponent } from './feedback/feedback.component';
       { path: 'users/:id', component: EditUserComponent, canActivate: [AuthGuard] },
       { path: 'candidates', component: CandidatesComponent, canActivate: [AuthGuard, ViewCandidateGuard] },
       { path: 'candidates/new', component: CandidateFormComponent, canActivate: [AuthGuard, EditCandidateGuard] },
-      { path: 'candidates/:id', component: CandidateProfileComponent, canActivate: [AuthGuard, EditCandidateGuard] },
+      { path: 'candidates/:id', component: CandidateProfileComponent, canActivate: [AuthGuard, ViewCandidateProfileGuard] },
       { path: 'candidates/:id/edit', component: CandidateFormComponent, canActivate: [AuthGuard, EditCandidateGuard] },
       { path: 'interviews', component: InterviewsComponent, canActivate: [AuthGuard] },
       { path: 'interviews/new', component: InterviewFormComponent, canActivate: [AuthGuard] },
@@ -88,7 +89,8 @@ import { FeedbackComponent } from './feedback/feedback.component';
   ],
   entryComponents: [
     FeedbackComponent,
-    RescheduleComponent
+    RescheduleComponent,
+    CandidateProfileComponent
   ],
   bootstrap: [AppComponent]
 })

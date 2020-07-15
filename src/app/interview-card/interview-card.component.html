@@ -14,6 +14,14 @@
       <div>
         <table>
             <tr>
+              <th>Candidate:</th>
+              <td>{{ candidate }}</td>
+            </tr>
+            <tr>
+              <th>Interviewer:</th>
+              <td>{{ interviewer }}</td>
+            </tr>
+            <tr>
               <th>Date:</th>
               <td>{{ date }}</td>
             </tr>
@@ -26,6 +34,7 @@
               <td>{{ endTime }}</td>
             </tr>
           </table>
+          <button (click)="openDialog(3)" mat-stroked-button color="accent">View Candidate</button>
           
         <span class="stats-value">
           <mat-icon>insert_invitation</mat-icon>
