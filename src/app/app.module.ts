@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderInterceptor } from './header.interceptor';
-
+import { MaterialComponentsModule } from './material-components/material-components.module';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -15,23 +15,21 @@ import { CandidateProfileComponent } from './candidate-profile/candidate-profile
 import { InterviewFormComponent } from './interview-form/interview-form.component';
 import { UsersComponent } from './users/users.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
-import { InterviewsComponent } from './interviews/interviews.component';
-import { MaterialComponentsModule } from './material-components/material-components.module';
 import { DataTableComponent } from './data-table/data-table.component';
 import { UserFormComponent } from './user-form/user-form.component';
 import { CandidateFormComponent } from './candidate-form/candidate-form.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { EditUserComponent } from './edit-user/edit-user.component';
 import { StatisticsCardComponent } from './statistics-card/statistics-card.component';
+import { InterviewCardComponent } from './interview-card/interview-card.component';
+import { RescheduleComponent } from './interview-form/reschedule/reschedule.component';
+import { FeedbackComponent } from './feedback/feedback.component';
 
 import { AuthGuard } from './services/guards/auth-guard.service';
 import { ViewUserGuard } from './services/guards/view-user-guard.service';
 import { EditUserGuard } from './services/guards/edit-user-guard.service';
 import { ViewCandidateGuard } from './services/guards/view-candidate-guard.service';
 import { EditCandidateGuard } from './services/guards/edit-candidate-guard.service';
-import { InterviewCardComponent } from './interview-card/interview-card.component';
-import { RescheduleComponent } from './interview-form/reschedule/reschedule.component';
-import { FeedbackComponent } from './feedback/feedback.component';
 import { ViewCandidateProfileGuard } from './services/guards/view-candidate-profile-guard.service';
 
 
@@ -45,7 +43,6 @@ import { ViewCandidateProfileGuard } from './services/guards/view-candidate-prof
     InterviewFormComponent,
     UsersComponent,
     SidenavComponent,
-    InterviewsComponent,
     DataTableComponent,
     UserFormComponent,
     CandidateFormComponent,
@@ -74,7 +71,6 @@ import { ViewCandidateProfileGuard } from './services/guards/view-candidate-prof
       { path: 'candidates/new', component: CandidateFormComponent, canActivate: [AuthGuard, EditCandidateGuard] },
       { path: 'candidates/:id', component: CandidateProfileComponent, canActivate: [AuthGuard, ViewCandidateProfileGuard] },
       { path: 'candidates/:id/edit', component: CandidateFormComponent, canActivate: [AuthGuard, EditCandidateGuard] },
-      { path: 'interviews', component: InterviewsComponent, canActivate: [AuthGuard] },
       { path: 'interviews/new', component: InterviewFormComponent, canActivate: [AuthGuard] },
       { path: 'profile/edit', component: EditUserComponent, canActivate: [AuthGuard] },
       { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },

@@ -3,8 +3,8 @@
         <mat-label>Filter By</mat-label>
         <mat-select [(value)]="selectedColumn" (selectionChange)="applyFilter($event)">
             <mat-option> All Fields </mat-option>  
-            <mat-option *ngFor="let column of objectKeys(columnHeader)" [value]="column">
-                {{ columnHeader[column] }}
+            <mat-option *ngFor="let column of objectKeys(filterFields)" [value]="column">
+                {{ filterFields[column] }}
             </mat-option>
         </mat-select>
     </mat-form-field>
@@ -13,6 +13,16 @@
         <mat-label>Search</mat-label>
         <input matInput (keyup)="applyFilter($event)">
         <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field class="view-filter" appearance="outline" *ngIf="showDropDownFilter">
+        <mat-label>Filter by Status</mat-label>
+        <mat-select placeholder="Status" [formControl]="ddFilter" (selectionChange)="applyFilter($event)">
+            <mat-option>None</mat-option>
+            <mat-option *ngFor="let opt of dropdownOptions" [value]="opt">
+                {{ opt }}
+            </mat-option>
+        </mat-select>
     </mat-form-field>
     
 </div>

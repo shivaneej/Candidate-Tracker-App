@@ -40,7 +40,6 @@ export class CandidateProfileComponent implements OnInit {
 
   async hireCandidate(){
     let response : any = await this.candidateProfileService.hireCandidate(this.candidateId)
-    console.log(response.code);
     if(response.code === 200){
       this.snackBar.open("Candidate Hired", "Dismiss", {
         duration : 3000
@@ -55,7 +54,6 @@ export class CandidateProfileComponent implements OnInit {
 
   async rejectCandidate(){
     let response : any = await this.candidateProfileService.rejectCandidate(this.candidateId)
-    console.log(response.code);
     if(response.code === 200){
       this.snackBar.open("Candidate Rejected", "Dismiss", {
         duration : 3000
