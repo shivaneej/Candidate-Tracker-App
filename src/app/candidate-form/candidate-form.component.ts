@@ -144,8 +144,8 @@ export class CandidateFormComponent implements OnInit {
     let response : any;
     if(this.candidateId === null) {
       processedFormData.recruiter = { id : this.authService.userLoggedIn().id };
-      // this.candidatesService.saveCandidate(processedFormData, this.selectedFile);
-      response = await this.candidatesService.save(processedFormData); 
+      response = await this.candidatesService.saveCandidate(processedFormData, this.selectedFile);
+      // response = await this.candidatesService.save(processedFormData); 
     } else 
       response = await this.candidatesService.update(processedFormData);
     // TODO : Replace error codes and messages

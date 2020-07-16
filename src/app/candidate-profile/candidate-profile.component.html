@@ -12,16 +12,21 @@
                 {{candidate.email}}
             </h4>
         </mat-card-subtitle>
-        <div class="row" *ngIf="(status == 'ready' || status == 'hold') && data === null">
-            <a mat-raised-button color="accent" *ngIf="status === 'ready'" routerLink="/interviews/new" [queryParams]="{candidate: candidateId}" class="button-right angular-button" appearance="outline"> 
-                Schedule Interview
+        <div class="row">
+            <a mat-raised-button color="accent" class="button-right angular-button" appearance="outline" (click)="downloadCV()"> 
+                Download CV
             </a>
-            <a mat-raised-button color="accent" class="button-right angular-button" appearance="outline" (click)="hireCandidate()"> 
-                Hire Candidate
-            </a>
-            <a mat-raised-button color="accent" class="button-right angular-button" appearance="outline" (click)="rejectCandidate()">
-                Reject Candidate
-            </a>
+            <div *ngIf="(status == 'ready' || status == 'hold') && data === null">
+                <a mat-raised-button color="accent" *ngIf="status === 'ready'" routerLink="/interviews/new" [queryParams]="{candidate: candidateId}" class="button-right angular-button" appearance="outline"> 
+                    Schedule Interview
+                </a>
+                <a mat-raised-button color="accent" class="button-right angular-button" appearance="outline" (click)="hireCandidate()"> 
+                    Hire Candidate
+                </a>
+                <a mat-raised-button color="accent" class="button-right angular-button" appearance="outline" (click)="rejectCandidate()">
+                    Reject Candidate
+                </a>
+            </div>
         </div>
     </mat-card>
     

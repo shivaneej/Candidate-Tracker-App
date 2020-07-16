@@ -3,6 +3,8 @@ import { CandidateProfileService } from './../services/candidate-profile.service
 import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-candidate-profile',
@@ -64,6 +66,22 @@ export class CandidateProfileComponent implements OnInit {
         duration : 3000
       });
     }
+  }
+
+  async downloadCV(){
+    let response : any = await this.candidateProfileService.downloadCV(this.candidateId)
+    if(response.code === 200){
+      saveAs(response.cvFile, this.candidate.firstName + "_CV");
+    }else if(response.code === 404){
+      this.snackBar.open("CV not found", "Dismiss", {
+        duration : 3000
+      });
+    }else{
+      this.snackBar.open("Something went wrong", "Dismiss", {
+        duration : 3000
+      });
+    }
+    
   }
 
   closeDialog(){

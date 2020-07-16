@@ -1,5 +1,5 @@
 import { DataService } from './data.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { first, retry, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
@@ -38,5 +38,19 @@ export class CandidateProfileService extends DataService{
       });
     });
   }
+
+  downloadCV(candidate_id : number){
+    let url = "http://localhost:8080/candidates/" + candidate_id + "/cv";
+
+    return new Promise((resolve, reject) => {
+      this.http.get(url, {responseType : 'blob'}).toPromise().then((response) => {
+        resolve({ code : 200, cvFile : response});
+      }).catch((error) => {
+        resolve({ code : error.status, error : error.error});
+      });
+    });
+
+
+}
 
 }
