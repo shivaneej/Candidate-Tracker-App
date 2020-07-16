@@ -1,0 +1,35 @@
+<h1 mat-dialog-title>Filter duration</h1>
+<div mat-dialog-content>
+    <div class="row">
+        <div class="col-5">
+            <mat-radio-group class="radio-group" [(ngModel)]="selectedDuration" (change)="radioSelected()">
+                <mat-radio-button class="radio-button" *ngFor="let duration of options" [value]="duration.value">
+                    {{ duration.label }}
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
+            <mat-divider [vertical]="true"></mat-divider>
+        <div class="col-5 right">
+            <span class="mat-h3">Choose a custom duration</span>
+            <mat-form-field appearance="outline" color="accent">
+                <mat-label>From</mat-label>
+                <input matInput [max]="maxDate" [matDatepicker]="startPicker" [formControl]="start">
+                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                <mat-datepicker #startPicker (opened)="dateSelected()"></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline" color="accent">
+                <mat-label>To</mat-label>
+                <input matInput [max]="maxDate" [matDatepicker]="endPicker" [formControl]="end" [min]="start">
+                <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                <mat-datepicker #endPicker (opened)="dateSelected()"></mat-datepicker>
+            </mat-form-field>
+            <mat-error *ngIf = "end.touched && form.invalid && form.errors?.invalidDuration">
+                Start date should be less than end date
+            </mat-error>
+        </div>
+    </div>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-button (click)="clear()">Clear</button>
+    <button mat-button (click)="save()" cdkFocusInitial>OK</button>
+</div>

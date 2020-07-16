@@ -31,6 +31,7 @@ import { EditUserGuard } from './services/guards/edit-user-guard.service';
 import { ViewCandidateGuard } from './services/guards/view-candidate-guard.service';
 import { EditCandidateGuard } from './services/guards/edit-candidate-guard.service';
 import { ViewCandidateProfileGuard } from './services/guards/view-candidate-profile-guard.service';
+import { FilterComponent } from './dashboard/filter/filter.component';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { ViewCandidateProfileGuard } from './services/guards/view-candidate-prof
     InterviewCardComponent,
     RescheduleComponent,
     FeedbackComponent,
+    FilterComponent,
   ],
   imports: [
     BrowserModule,
@@ -86,7 +88,8 @@ import { ViewCandidateProfileGuard } from './services/guards/view-candidate-prof
   entryComponents: [
     FeedbackComponent,
     RescheduleComponent,
-    CandidateProfileComponent
+    CandidateProfileComponent,
+    FilterComponent
   ],
   bootstrap: [AppComponent]
 })

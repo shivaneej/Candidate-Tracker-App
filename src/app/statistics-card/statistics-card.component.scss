@@ -3,27 +3,7 @@
     width: 100%;   
 }
 mat-card {
-    // max-width: 300px;
     margin: 2em;
-
-    mat-card-actions { 
-        display: flex;
-        mat-button-toggle-group {
-            margin-inline-start: auto;
-            border: none;
-
-            .mat-button-toggle-checked {
-                background-color: $accent;
-                color: #ffffff;
-                border-radius: 4px;
-            }
-        }
-    }
-
-    .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
-        border-left: none;
-    }
-
     mat-card-content {
         margin: auto -16px;
         padding: 16px;

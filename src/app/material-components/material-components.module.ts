@@ -23,6 +23,10 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatRadioModule } from '@angular/material/radio';
+
+
 
 @NgModule({
   exports: [
@@ -49,7 +53,9 @@ import { MatGridListModule } from '@angular/material/grid-list';
     NgxMaterialTimepickerModule,
     MatSlideToggleModule,
     MatButtonToggleModule,
-    MatGridListModule
+    MatGridListModule,
+    MatDialogModule,
+    MatRadioModule
   ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-IN' }

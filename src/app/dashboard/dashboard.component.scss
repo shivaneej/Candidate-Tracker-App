@@ -1,0 +1,19 @@
+@import '../colors';
+
+mat-card-header { 
+    display: flex;
+    div {
+        margin-inline-start: auto;
+    }
+    mat-button-toggle-group {
+        border: 1px solid $accent;
+        .mat-button-toggle-checked {
+            background-color: $accent;
+            color: #ffffff;
+        }
+    }
+}
+
+.mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
+    border-left: none;
+}

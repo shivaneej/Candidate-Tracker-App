@@ -11,7 +11,8 @@ export class StatisticsCardComponent implements OnInit {
   @Input('title') title;
   @Input('color') color;
   @Input('icon') icon;
-  statsMode = 'overall';
+  @Input('statsMode') statsMode;
+  // statsMode = 'overall';
   constructor() { }
 
   ngOnInit(): void {

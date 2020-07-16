@@ -22,6 +22,9 @@ body {
     .col-4 {
         width: 33.33%;
     }
+    .col-5 {
+        width: 41.66%;
+    }
     .col-6{
         width: 50%;
     }
@@ -74,8 +77,11 @@ div.mat-tab-body-content {
 }
 
 mat-card {
-    mat-card-actions {
+    mat-card-header {
         .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+            line-height: 40px!important;
+        }
+        .mat-raised-button {
             line-height: 40px!important;
         }
     }

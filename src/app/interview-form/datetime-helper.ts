@@ -14,4 +14,10 @@ export class DateTimeHelper {
         var isoDateTime = new Date(dateTime.getTime() - (dateTime.getTimezoneOffset() * 60000)).toISOString();
         return isoDateTime.slice(0, 19).replace('T', ' '); ;
     }
+
+    static convertDatetoISO(date : Date) {
+        let dateObj = new Date(date);
+        var isoDateTime = new Date(dateObj.getTime() - (dateObj.getTimezoneOffset() * 60000)).toISOString();
+        return isoDateTime.split('T')[0];
+    }
 }
