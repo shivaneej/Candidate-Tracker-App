@@ -32,4 +32,24 @@ export class CandidatesService extends DataService{
       return response;
     }
   }
+
+  async updateCandidate(candidate : any , cv : File) {
+    let response : any = await this.update(candidate);
+    if(response.code === 200){
+      return new Promise((resolve, reject) => {
+        if(!cv)
+          resolve({code : 200});
+        let cv_url = "http://localhost:8080/candidates/" + response.response_json.id + "/cv";
+        const cvData = new FormData();
+        cvData.append("cvFile" , cv);
+        this.http.put<any>(cv_url, cvData).toPromise().then((response) => {
+          resolve({code : 200});
+        }).catch((error) => {
+          resolve({ code : error.status, error : error.error});
+        });
+      });
+    }else{
+      return response;
+    }
+  }
 }

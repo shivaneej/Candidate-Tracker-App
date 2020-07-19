@@ -1,16 +1,17 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CandidatesService } from '../services/candidates.service';
 import { SkillService } from '../services/skills.service';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { Skill } from '../models/skill';
 import { startWith, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../services/auth.service';
+import { CandidateProfileService } from '../services/candidate-profile.service';
 
 
 @Component({
@@ -42,7 +43,8 @@ export class CandidateFormComponent implements OnInit {
     private skillService : SkillService,
     private snackBar : MatSnackBar,
     private authService : AuthService,
-    private route : ActivatedRoute ) { 
+    private route : ActivatedRoute,
+    private candidateProfileService : CandidateProfileService ) { 
       let pattern = "^(\\+\\d{1,3}[- ]?)?0?[7-9]{1}\\d{9}$";
       this.form = builder.group({
         firstName : ['', Validators.required],
@@ -54,7 +56,7 @@ export class CandidateFormComponent implements OnInit {
         ectc : ['', [Validators.required, Validators.min(0)]],
         ctct : ['', [Validators.required, Validators.min(0)]],
         source : ['', Validators.required],
-        fileInput : ['', Validators.required],
+        fileInput : [''],
         skills : ['']
       });    
   }
@@ -65,22 +67,30 @@ export class CandidateFormComponent implements OnInit {
       if(this.candidateId !== null) {
         this.candidatesService.getById(this.candidateId)
         .subscribe((candidate) => {
+            // Fetch candidate data
             this.candidateData = candidate as any;
             console.log(this.candidateData);
-            this.form.setValue({
-              firstName : this.candidateData.firstName, 
-              lastName : this.candidateData.lastName,
-              contact : this.candidateData.contact,
-              email : this.candidateData.email,
-              address : this.candidateData.address,
-              preferredLoc : this.candidateData.preferredLoc,
-              ectc : this.candidateData.ectc,
-              ctct : this.candidateData.ctct,
-              source : this.candidateData.source,
-              fileInput : '',
-              skills : ''
+            // Fetch CV
+            let response = from(this.candidateProfileService.downloadCV(this.candidateId));
+            let file : Blob;
+            response.subscribe((result : any) => {
+              file = result.cvFile || null;              
+              this.selectedFile = (file) ? this.blobToFile(file, this.candidateData.firstName + "_CV.pdf") : null;
+              this.form.setValue({
+                firstName : this.candidateData.firstName, lastName : this.candidateData.lastName,
+                contact : this.candidateData.contact,
+                email : this.candidateData.email,
+                address : this.candidateData.address,
+                preferredLoc : this.candidateData.preferredLoc,
+                ectc : this.candidateData.ectc,
+                ctct : this.candidateData.ctct,
+                source : this.candidateData.source,
+                fileInput : '',
+                skills : ''
+              });
+              this.selectedSkills = this.candidateData.skillSet.map(skill => skill.skillName);
+              this.email.disable();
             });
-            this.selectedSkills = this.candidateData.skillSet.map(skill => skill.skillName);
         });
       }
 
@@ -98,9 +108,14 @@ export class CandidateFormComponent implements OnInit {
     )).subscribe((skills : Skill[]) => {
         this.allSkills = skills;
         this.skillsOptions = this.allSkills.map(skill => skill.name);
-        console.log(this.allSkills, this.skillsOptions);
     });
   }
+
+  public blobToFile = (theBlob: Blob, fileName:string): File => {
+    var b: any = theBlob;
+    b.name = fileName;
+    return <File>theBlob;
+}
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
@@ -140,14 +155,19 @@ export class CandidateFormComponent implements OnInit {
     let selectedSkills = (this.allSkills.filter(skill => this.selectedSkills.includes(skill.name)))
     .map(skill => skill.mapFields());
     let processedFormData = Object.assign({}, this.form.value);
-    processedFormData.skills = selectedSkills;
+    processedFormData.skillSet = selectedSkills;
+    delete processedFormData.skills;
     let response : any;
     if(this.candidateId === null) {
       processedFormData.recruiter = { id : this.authService.userLoggedIn().id };
+      console.log(processedFormData);
       response = await this.candidatesService.saveCandidate(processedFormData, this.selectedFile);
-      // response = await this.candidatesService.save(processedFormData); 
-    } else 
-      response = await this.candidatesService.update(processedFormData);
+    } else {
+      let updateBody = Object.assign({}, this.candidateData);
+      Object.assign(updateBody, processedFormData);
+      console.log(updateBody);
+      response = await this.candidatesService.updateCandidate(updateBody, this.selectedFile);
+    }
     // TODO : Replace error codes and messages
     if(response.code !== 200){
       let errorMessage = "Something went wrong";
@@ -200,5 +220,4 @@ export class CandidateFormComponent implements OnInit {
   get skills() {
     return this.form.get('skills');
   }
-
 }

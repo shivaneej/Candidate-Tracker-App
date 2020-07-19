@@ -75,13 +75,13 @@
             <mat-form-field>
                 <mat-label *ngIf="selectedFile; else newFile">{{selectedFile.name}}</mat-label>
                 <ng-template #newFile>
-                    <mat-label>Upload CV *</mat-label>
+                    <mat-label>Upload CV</mat-label>
                 </ng-template>
                 <input matInput disabled>
                 <button type="button" mat-mini-fab color="accent" matSuffix (click)="fileInput.click()">
                     <mat-icon>attach_file</mat-icon>
                 </button>
-                <input hidden required formControlName="fileInput" 
+                <input hidden formControlName="fileInput" 
                 (change)="selectFile($event)" #fileInput type="file" id="file"
                 accept=".pdf,.doc,.docx">
             </mat-form-field>
