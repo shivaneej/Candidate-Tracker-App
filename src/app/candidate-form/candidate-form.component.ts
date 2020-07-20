@@ -157,16 +157,17 @@ export class CandidateFormComponent implements OnInit {
     let processedFormData = Object.assign({}, this.form.value);
     processedFormData.skillSet = selectedSkills;
     delete processedFormData.skills;
+    delete processedFormData.fileInput;
     let response : any;
     if(this.candidateId === null) {
       processedFormData.recruiter = { id : this.authService.userLoggedIn().id };
       console.log(processedFormData);
-      response = await this.candidatesService.saveCandidate(processedFormData, this.selectedFile);
+      response = await this.candidatesService.saveOrUpdateCandidate(processedFormData, this.selectedFile, true);
     } else {
       let updateBody = Object.assign({}, this.candidateData);
       Object.assign(updateBody, processedFormData);
       console.log(updateBody);
-      response = await this.candidatesService.updateCandidate(updateBody, this.selectedFile);
+      response = await this.candidatesService.saveOrUpdateCandidate(updateBody, this.selectedFile, false);
     }
     // TODO : Replace error codes and messages
     if(response.code !== 200){

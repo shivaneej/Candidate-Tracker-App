@@ -15,7 +15,7 @@
         <table>
             <tr>
               <th>Candidate:</th>
-              <td>{{ candidate }}</td>
+              <td><a (click)="openDialog(3)" color="accent">{{ candidate }}</a></td>
             </tr>
             <tr>
               <th>Interviewer:</th>
@@ -34,7 +34,7 @@
               <td>{{ endTime }}</td>
             </tr>
           </table>
-          <button (click)="openDialog(3)" mat-stroked-button color="accent">View Candidate</button>
+          <!-- <button (click)="openDialog(3)" mat-stroked-button color="accent">View Candidate</button> -->
           
         <span class="stats-value">
           <mat-icon>insert_invitation</mat-icon>

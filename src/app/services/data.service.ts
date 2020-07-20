@@ -18,7 +18,7 @@ export class DataService {
     return new Promise((resolve, reject) => {
       // POST request to server
       this.http.post<any>(this.url, resource).toPromise().then((response) => {
-        resolve({ code : 200, response_json : response});
+        resolve({ code : 200, body : response});
       }).catch((error) => {
         resolve({ code : error.status, error : error.error});
       });
