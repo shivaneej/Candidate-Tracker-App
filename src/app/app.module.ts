@@ -24,6 +24,7 @@ import { StatisticsCardComponent } from './statistics-card/statistics-card.compo
 import { InterviewCardComponent } from './interview-card/interview-card.component';
 import { RescheduleComponent } from './interview-form/reschedule/reschedule.component';
 import { FeedbackComponent } from './feedback/feedback.component';
+import { FilterComponent } from './dashboard/filter/filter.component';
 
 import { AuthGuard } from './services/guards/auth-guard.service';
 import { ViewUserGuard } from './services/guards/view-user-guard.service';
@@ -31,7 +32,9 @@ import { EditUserGuard } from './services/guards/edit-user-guard.service';
 import { ViewCandidateGuard } from './services/guards/view-candidate-guard.service';
 import { EditCandidateGuard } from './services/guards/edit-candidate-guard.service';
 import { ViewCandidateProfileGuard } from './services/guards/view-candidate-profile-guard.service';
-import { FilterComponent } from './dashboard/filter/filter.component';
+import { CreateCandidateGuard } from './services/guards/create-candidate-guard.service';
+import { CreateInterviewGuard } from './services/guards/create-interview-guard.service';
+
 
 
 @NgModule({
@@ -70,10 +73,10 @@ import { FilterComponent } from './dashboard/filter/filter.component';
       { path: 'users/new', component: UserFormComponent, canActivate: [AuthGuard, EditUserGuard] },
       { path: 'users/:id', component: EditUserComponent, canActivate: [AuthGuard] },
       { path: 'candidates', component: CandidatesComponent, canActivate: [AuthGuard, ViewCandidateGuard] },
-      { path: 'candidates/new', component: CandidateFormComponent, canActivate: [AuthGuard, EditCandidateGuard] },
+      { path: 'candidates/new', component: CandidateFormComponent, canActivate: [AuthGuard, CreateCandidateGuard] },
       { path: 'candidates/:id', component: CandidateProfileComponent, canActivate: [AuthGuard, ViewCandidateProfileGuard] },
       { path: 'candidates/:id/edit', component: CandidateFormComponent, canActivate: [AuthGuard, EditCandidateGuard] },
-      { path: 'interviews/new', component: InterviewFormComponent, canActivate: [AuthGuard] },
+      { path: 'interviews/new', component: InterviewFormComponent, canActivate: [AuthGuard, CreateInterviewGuard] },
       { path: 'profile/edit', component: EditUserComponent, canActivate: [AuthGuard] },
       { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
       { path: '**', component: LoginComponent } // change to 404 

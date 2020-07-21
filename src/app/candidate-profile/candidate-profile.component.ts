@@ -4,6 +4,8 @@ import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
+import { CANDIDATE_PERMISSION, INTERVIEW_PERMISSION } from '../services/guards/permissions';
+import { AuthService } from '../services/auth.service';
 
 
 @Component({
@@ -19,14 +21,19 @@ export class CandidateProfileComponent implements OnInit {
   columnHeader;
   dataLoading : boolean = false;
 
+  canScheduleInterview : boolean;
+
   candidateId;
   constructor(private route: ActivatedRoute, private router : Router,
+    private authService : AuthService,
     private candidateProfileService : CandidateProfileService, private snackBar : MatSnackBar, 
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any, @Optional() public dialogRef: MatDialogRef<CandidateProfileComponent>,){
   }
 
   ngOnInit(): void {
     this.dataLoading = true;
+    let user = this.authService.userLoggedIn();
+    this.canScheduleInterview = INTERVIEW_PERMISSION.create.includes(user.role.roleString);
     this.candidateId = this.route.snapshot.paramMap.get("id");
     if(this.data !== null) {
       this.candidateId = this.data; 

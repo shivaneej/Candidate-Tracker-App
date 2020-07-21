@@ -6,7 +6,8 @@ export const USER_PERMISSION = {
 
 export const CANDIDATE_PERMISSION = {
     read : ['Admin', 'Recruiter'],
-    write : ['Admin', 'Recruiter']
+    write : ['Admin', 'Recruiter'],
+    create : ['Recruiter']
 }
 
 export const CANDIDATE_PROFILE_PERMISSION = {
@@ -16,7 +17,8 @@ export const CANDIDATE_PROFILE_PERMISSION = {
 
 export const INTERVIEW_PERMISSION = {
     read : ['Recruiter', 'Interviewer'],
-    write : ['Recruiter', 'Interviewer']
+    write : ['Recruiter', 'Interviewer'],
+    create : ['Recruiter']
 }
 
 export const INTERVIEWER_SKILLS_PERMISSION = {

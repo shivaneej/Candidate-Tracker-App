@@ -65,7 +65,7 @@ export class InterviewFormComponent implements OnInit {
     return this.options.filter(option => option.email.toLowerCase().includes(filterValue));
   }
 
-  save() {
+  async save() {
     let processedFormData = this.processInterviewData(this.form.value, this.options);
     if(processedFormData === null) {
       this.snackbar.open("Could not schedule interview", "Dismiss", {
@@ -73,8 +73,16 @@ export class InterviewFormComponent implements OnInit {
       });
       return;
     }    
-    console.log(processedFormData);
-    this.interviewService.save(processedFormData);
+    let response : any = await this.interviewService.save(processedFormData);
+    if(response.code !== 200){
+      this.snackbar.open("Something went wrong", "Dismiss", {
+        duration: 2000,
+      });
+    } else {
+      this.snackbar.open("Successfully scheduled interview", "Dismiss", {
+        duration: 2000,
+      });
+    }
     this.router.navigateByUrl('/dashboard');
   }
 

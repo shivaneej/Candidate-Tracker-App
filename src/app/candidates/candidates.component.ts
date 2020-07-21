@@ -2,6 +2,8 @@ import { CandidatesService } from './../services/candidates.service';
 import { Component, OnInit } from '@angular/core';
 import { Candidate } from '../models/candidate';
 import { map } from 'rxjs/operators';
+import { CANDIDATE_PERMISSION } from '../services/guards/permissions';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-candidates',
@@ -17,12 +19,16 @@ export class CandidatesComponent implements OnInit {
   dropdownOptions = ['Ready', 'Hold', 'Hired', 'Rejected'];
   ddFilterColumn = 'status';
 
-  constructor(private candidatesService : CandidatesService) {
+  canCreateNewCandidate : boolean;
+
+  constructor(private candidatesService : CandidatesService, private authService : AuthService) {
 
   }
 
   ngOnInit(): void {
     this.dataLoading = true;
+    let currentUser = this.authService.userLoggedIn();
+    this.canCreateNewCandidate = CANDIDATE_PERMISSION.create.includes(currentUser.role.roleString);
     this.candidatesService.getAll().pipe(
       map((candidates : any) => {
         console.log(candidates);

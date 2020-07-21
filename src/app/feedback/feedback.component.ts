@@ -22,7 +22,7 @@ export class FeedbackComponent {
   }
 
   save(){
-    if(this.feedback.value.trim() !== this.interview.feedback.trim()) {
+    if(this.feedback.value.trim() !== this.interview.feedback?.trim()) {
       let processedData = Object.assign({}, this.interview);
       processedData.feedback = this.feedback.value;
       this.dialogRef.close({ event: 'Feedback', data: processedData });
