@@ -3,15 +3,11 @@ import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CandidatesService } from '../services/candidates.service';
 import { SkillService } from '../services/skills.service';
-import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { Observable, from } from 'rxjs';
-import { Skill } from '../models/skill';
-import { startWith, map } from 'rxjs/operators';
+import { from } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../services/auth.service';
 import { CandidateProfileService } from '../services/candidate-profile.service';
+import { SkillsChipListComponent } from '../skills-chip-list/skills-chip-list.component';
 
 
 @Component({
@@ -22,25 +18,17 @@ import { CandidateProfileService } from '../services/candidate-profile.service';
 export class CandidateFormComponent implements OnInit {
 
   form;
-  @ViewChild('skillInput') skillInput: ElementRef<HTMLInputElement>;
-  @ViewChild('auto') matAutocomplete: MatAutocomplete;
+  @ViewChild(SkillsChipListComponent) skillsChipList: SkillsChipListComponent;
+
   selectedFile: File;
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  filteredSkills: Observable<string[]>;
+  
   selectedSkills: string[] = [];
-  skillsOptions: string[] = [];
-
-  allSkills : Skill[] = [];
-
   candidateId;
   candidateData;
-
-
 
   constructor(private builder: FormBuilder, 
     private candidatesService : CandidatesService,
     private router : Router,
-    private skillService : SkillService,
     private snackBar : MatSnackBar,
     private authService : AuthService,
     private route : ActivatedRoute,
@@ -58,7 +46,7 @@ export class CandidateFormComponent implements OnInit {
         source : ['', Validators.required],
         fileInput : [''],
         skills : ['']
-      });    
+      });   
   }
 
 
@@ -69,7 +57,6 @@ export class CandidateFormComponent implements OnInit {
         .subscribe((candidate) => {
             // Fetch candidate data
             this.candidateData = candidate as any;
-            console.log(this.candidateData);
             // Fetch CV
             let response = from(this.candidateProfileService.downloadCV(this.candidateId));
             let file : Blob;
@@ -93,58 +80,12 @@ export class CandidateFormComponent implements OnInit {
             });
         });
       }
-
-    this.filteredSkills = this.skills.valueChanges
-    .pipe(
-      startWith(null),
-      map((skillName: string | null) => skillName ? this._filter(skillName) : this.skillsOptions.slice())
-    );
-    this.skillService.getAll().pipe(
-      map((skills : any) => {
-        return skills.map((skill) => {
-          return new Skill(skill.skillId, skill.skillName);
-        })
-      }
-    )).subscribe((skills : Skill[]) => {
-        this.allSkills = skills;
-        this.skillsOptions = this.allSkills.map(skill => skill.name);
-    });
   }
 
   public blobToFile = (theBlob: Blob, fileName:string): File => {
     var b: any = theBlob;
     b.name = fileName;
     return <File>theBlob;
-}
-
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-    if ((value || '').trim()) {
-      this.selectedSkills.push(value.trim());
-    }
-    if (input) {
-      input.value = '';
-    }
-    this.skills.setValue(null);
-  }
-
-  remove(skill: string): void {
-    const index = this.selectedSkills.indexOf(skill);
-    if (index >= 0) {
-      this.selectedSkills.splice(index, 1);
-    }
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.selectedSkills.push(event.option.viewValue);
-    this.skillInput.nativeElement.value = '';
-    this.skills.setValue(null);
-  }
-
-  private _filter(value : string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.skillsOptions.filter(skill => skill.toLowerCase().indexOf(filterValue) === 0);
   }
 
   selectFile(event) {
@@ -152,7 +93,7 @@ export class CandidateFormComponent implements OnInit {
   }
 
   async save() {
-    let selectedSkills = (this.allSkills.filter(skill => this.selectedSkills.includes(skill.name)))
+    let selectedSkills = (this.skillsChipList.allSkills.filter(skill => this.skillsChipList.selectedSkills.includes(skill.name)))
     .map(skill => skill.mapFields());
     let processedFormData = Object.assign({}, this.form.value);
     processedFormData.skillSet = selectedSkills;

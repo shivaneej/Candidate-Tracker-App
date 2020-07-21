@@ -34,6 +34,7 @@ import { EditCandidateGuard } from './services/guards/edit-candidate-guard.servi
 import { ViewCandidateProfileGuard } from './services/guards/view-candidate-profile-guard.service';
 import { CreateCandidateGuard } from './services/guards/create-candidate-guard.service';
 import { CreateInterviewGuard } from './services/guards/create-interview-guard.service';
+import { SkillsChipListComponent } from './skills-chip-list/skills-chip-list.component';
 
 
 
@@ -57,6 +58,7 @@ import { CreateInterviewGuard } from './services/guards/create-interview-guard.s
     RescheduleComponent,
     FeedbackComponent,
     FilterComponent,
+    SkillsChipListComponent,
   ],
   imports: [
     BrowserModule,

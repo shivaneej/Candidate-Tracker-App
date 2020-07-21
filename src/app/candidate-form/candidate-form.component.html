@@ -85,23 +85,11 @@
                 (change)="selectFile($event)" #fileInput type="file" id="file"
                 accept=".pdf,.doc,.docx">
             </mat-form-field>
+            
+            <!-- Skills -->
+            <skills-chip-list [control]="skills" [selected]="selectedSkills"></skills-chip-list>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid" class="full-width-button">Save</button>            
 
-            <mat-form-field appearance="outline">
-                <mat-chip-list #chipList>
-                    <mat-chip *ngFor="let skill of selectedSkills" selectable="true" removable="true" (removed)="remove(skill)">
-                        {{ skill }}
-                        <mat-icon matChipRemove>cancel</mat-icon>
-                    </mat-chip>
-                    <input placeholder="Add Skills" #skillInput formControlName="skills" [matAutocomplete]="auto" [matChipInputFor]="chipList"
-                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes" (matChipInputTokenEnd)="add($event)">
-                </mat-chip-list>
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                    <mat-option *ngFor="let skill of filteredSkills | async" [value]="skill">
-                        {{ skill }}
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
-            <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid" class="full-width-button">Save</button>
         </form>
     </mat-card-content>
 </mat-card>

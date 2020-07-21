@@ -20,6 +20,9 @@
                 <mat-error *ngIf="contact.errors?.required">Contact is required</mat-error>
                 <mat-error *ngIf="contact.errors?.pattern">Contact entered is invalid</mat-error>
             </mat-form-field>
+
+            <skills-chip-list *ngIf="addSkills" [control]="skills" [selected]="selectedSkills"></skills-chip-list>
+
             <mat-slide-toggle formControlName="isActive" class="toggle-left" *ngIf="subordinateProfile">User active</mat-slide-toggle>
             <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid" class="full-width-button">Save</button>
         </form>

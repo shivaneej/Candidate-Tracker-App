@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../services/users.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../services/auth.service';
+import { ADD_SKILLS } from '../services/guards/permissions';
+import { SkillsChipListComponent } from '../skills-chip-list/skills-chip-list.component';
 
 @Component({
   selector: 'app-edit-user',
@@ -13,13 +15,18 @@ import { AuthService } from '../services/auth.service';
 export class EditUserComponent implements OnInit {
 
   form;
+  @ViewChild(SkillsChipListComponent) skillsChipList: SkillsChipListComponent;
   userData = {
     firstName : '',
     lastName : '',
     contact : '',
-    isActive : ''
+    isActive : '',
+    skills : ''
   };
   subordinateProfile : boolean = true;
+  addSkills : boolean = false;
+  selectedSkills: string[] = [];
+
   constructor(private builder: FormBuilder,
     private route : ActivatedRoute,
     private usersService : UsersService,
@@ -31,7 +38,8 @@ export class EditUserComponent implements OnInit {
         firstName : ['', Validators.required],
         lastName : ['', Validators.required],
         contact : ['', [Validators.required, Validators.pattern(pattern)]],
-        isActive : '' 
+        isActive : '',
+        skills : '' 
       });
   }
 
@@ -42,14 +50,16 @@ export class EditUserComponent implements OnInit {
       this.subordinateProfile = false;
     }
     this.usersService.getById(userId)
-    .subscribe((user) => {
-      this.userData = user as any;
-      console.log(this.userData);
+    .subscribe((user : any) => {
+      this.userData = user;
+      this.addSkills = ADD_SKILLS.of.includes(user.role.roleString);
+      this.selectedSkills = user.skills.map(skill => skill.skillName);
       this.form.setValue({
         firstName : this.userData.firstName, 
         lastName : this.userData.lastName,
         contact : this.userData.contact,
-        isActive : (parseInt(this.userData.isActive) === 1)
+        isActive : (parseInt(this.userData.isActive) === 1),
+        skills : ''
       });
     });
   }
@@ -57,7 +67,14 @@ export class EditUserComponent implements OnInit {
   async save() {
     let oldData = Object.assign({}, this.userData);
     let updatedData = Object.assign(oldData, this.form.value);
+    updatedData.skills = [];
+    if(this.addSkills) {
+      let selectedSkills = (this.skillsChipList.allSkills.filter(skill => this.skillsChipList.selectedSkills.includes(skill.name)))
+      .map(skill => skill.mapFields());
+      updatedData.skills = selectedSkills;
+    }
     updatedData.isActive = (updatedData.isActive === true) ? 1 : 0;  
+    console.log(updatedData);
     let response : any = await this.usersService.update(updatedData);
     if(response.code !== 200){
       let errorMessage = "Something went wrong";
@@ -95,6 +112,9 @@ export class EditUserComponent implements OnInit {
   }
   get isActive() {
     return this.form.get('isActive');
+  }
+  get skills() {
+    return this.form.get('skills');
   }
 
 }

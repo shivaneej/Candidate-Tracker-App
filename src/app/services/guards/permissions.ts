@@ -1,7 +1,11 @@
 export const USER_PERMISSION = {
     read : ['Root', 'Admin', 'OPS'],
     write : ['Root', 'Admin', 'OPS'],
-    writeManager : ['Root', 'Admin']
+    writeManager : ['Root', 'Admin'],
+}
+
+export const ADD_SKILLS = {
+    of : ['Interviewer']
 }
 
 export const CANDIDATE_PERMISSION = {
