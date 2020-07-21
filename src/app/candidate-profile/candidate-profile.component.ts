@@ -4,7 +4,7 @@ import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
-import { CANDIDATE_PERMISSION, INTERVIEW_PERMISSION } from '../services/guards/permissions';
+import { INTERVIEW_PERMISSION } from '../services/guards/permissions';
 import { AuthService } from '../services/auth.service';
 
 
@@ -50,28 +50,24 @@ export class CandidateProfileComponent implements OnInit {
   async hireCandidate(){
     let response : any = await this.candidateProfileService.hireCandidate(this.candidateId)
     if(response.code === 200){
-      this.snackBar.open("Candidate Hired", "Dismiss", {
-        duration : 3000
-      });
+      this.snackBar.open("Candidate Hired", "Dismiss", { duration : 2000 });
       this.status = 'hired';
-    }else{
-      this.snackBar.open("Something went wrong", "Dismiss", {
-        duration : 3000
-      });
+    } else if(response.code === 404) {
+      this.snackBar.open("Cannot find candidate", "Dismiss", { duration : 2000 });
+    } else {
+      this.snackBar.open("Something went wrong", "Dismiss", { duration : 2000 });
     }
   }
 
   async rejectCandidate(){
     let response : any = await this.candidateProfileService.rejectCandidate(this.candidateId)
     if(response.code === 200){
-      this.snackBar.open("Candidate Rejected", "Dismiss", {
-        duration : 3000
-      });
+      this.snackBar.open("Candidate Rejected", "Dismiss", { duration : 2000 });
       this.status = 'rejected';
-    }else{
-      this.snackBar.open("Something went wrong", "Dismiss", {
-        duration : 3000
-      });
+    } else if(response.code === 404) {
+      this.snackBar.open("Cannot find candidate", "Dismiss", { duration : 2000 });
+    } else{
+      this.snackBar.open("Something went wrong", "Dismiss", { duration : 2000 });
     }
   }
 
@@ -79,14 +75,12 @@ export class CandidateProfileComponent implements OnInit {
     let response : any = await this.candidateProfileService.downloadCV(this.candidateId)
     if(response.code === 200){
       saveAs(response.cvFile, this.candidate.firstName + "_CV");
-    }else if(response.code === 404){
-      this.snackBar.open("CV not found", "Dismiss", {
-        duration : 3000
-      });
-    }else{
-      this.snackBar.open("Something went wrong", "Dismiss", {
-        duration : 3000
-      });
+    } else if(response.code === 404){
+      this.snackBar.open("CV not found", "Dismiss", { duration : 2000 });
+    } else if(response.code === 415){
+      this.snackBar.open("Cannot read CV", "Dismiss", { duration : 2000 });
+    } else{
+      this.snackBar.open("Something went wrong", "Dismiss", { duration : 2000 });
     }
     
   }

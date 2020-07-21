@@ -169,21 +169,22 @@ export class CandidateFormComponent implements OnInit {
       console.log(updateBody);
       response = await this.candidatesService.saveOrUpdateCandidate(updateBody, this.selectedFile, false);
     }
-    // TODO : Replace error codes and messages
     if(response.code !== 200){
       let errorMessage = "Something went wrong";
       switch(response.code) {
         case 409 :
           errorMessage = "Candidate already exists";
           break;
+        case 404 :
+          errorMessage = "Candidate not found";
+          break;
+        case 415 :
+          errorMessage = "Could not upload CV";
+          break;
       }
-      this.snackBar.open(errorMessage, "Dismiss", {
-        duration: 2000,
-      });
+      this.snackBar.open(errorMessage, "Dismiss", { duration: 2000 });
     } else {
-      this.snackBar.open("Successfully saved candidate", "Dismiss", {
-        duration: 2000,
-      });
+      this.snackBar.open("Successfully saved candidate", "Dismiss", { duration: 2000, });
       this.router.navigateByUrl('/candidates');
     }
   }

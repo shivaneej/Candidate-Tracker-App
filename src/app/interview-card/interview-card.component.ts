@@ -35,9 +35,8 @@ export class InterviewCardComponent implements OnInit {
 
   openDialog(value : number) {
     let dialogRef;
-    if(value === 1) {
+    if(value === 1)
       dialogRef = this.dialog.open(RescheduleComponent, { data : this.interview });
-    }
     else if(value === 2)
       dialogRef = this.dialog.open(FeedbackComponent, { data : this.interview });
     else if(value === 3)
@@ -54,7 +53,6 @@ export class InterviewCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.interview);
     this.candidate = this.interview.candidate.firstName + " " + this.interview.candidate.lastName;
     this.candidateId = this.interview.candidate.id;
     this.interviewer = this.interview.interviewer.firstName + " " + this.interview.interviewer.lastName;
@@ -101,13 +99,9 @@ export class InterviewCardComponent implements OnInit {
     if(formData !== null) {
       let response : any = await this.interviewService.updateInterview(formData, 2);
       if(response.code !== 200) {
-        this.snackbar.open("Could not update feedback", "Dismiss", {
-          duration: 2000,
-        });
+        this.snackbar.open("Could not update feedback", "Dismiss", { duration: 2000 });
       } else {
-        this.snackbar.open("Successfully updated feedback", "Dismiss", {
-          duration: 2000,
-        });
+        this.snackbar.open("Successfully updated feedback", "Dismiss", { duration: 2000 });
         this.interview = formData;
       }
     }
@@ -117,13 +111,9 @@ export class InterviewCardComponent implements OnInit {
     if(formData !== null) {
       let response : any = await this.interviewService.updateInterview(formData, 1);
       if(response.code !== 200) {
-        this.snackbar.open("Could not reschedule the interview", "Dismiss", {
-          duration: 2000,
-        });
+        this.snackbar.open("Could not reschedule the interview", "Dismiss", { duration: 2000 });
       } else {
-        this.snackbar.open("Successfully rescheduled the interview", "Dismiss", {
-          duration: 2000,
-        });
+        this.snackbar.open("Successfully rescheduled the interview", "Dismiss", { duration: 2000 });
         this.interview = response.body;
         this.setStatusAsPending();
         this.updateDate();
@@ -134,13 +124,9 @@ export class InterviewCardComponent implements OnInit {
   async accept() {
     let response : any = await this.interviewService.accept(this.interview.interviewId);
     if(response.code !== 200) {
-      this.snackbar.open("Could not accept interview", "Dismiss", {
-        duration: 2000,
-      });
+      this.snackbar.open("Could not accept interview", "Dismiss", { duration: 2000 });
     } else {
-      this.snackbar.open("Successfully accepted the interview", "Dismiss", {
-        duration: 2000,
-      });
+      this.snackbar.open("Successfully accepted the interview", "Dismiss", { duration: 2000 });
       this.interview = response.body;
       this.setStatusAsConfirmed();
     }

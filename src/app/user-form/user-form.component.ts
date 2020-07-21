@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UsersService } from '../services/users.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { RoleService } from '../services/role.service';
 import { Observable } from 'rxjs';
@@ -9,7 +9,6 @@ import { startWith, map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { USER_PERMISSION } from '../services/guards/permissions';
 import { Role } from '../models/role';
-import { SystemUser } from '../models/system-user';
 
 @Component({
   selector: 'app-user-form',
@@ -76,9 +75,7 @@ export class UserFormComponent implements OnInit {
   async save() {
     let processedFormData = this.processManagerData(this.form.getRawValue(), this.options);
     if(processedFormData === null) {
-      this.snackBar.open("Could not create user", "Dismiss", {
-        duration: 2000,
-      });
+      this.snackBar.open("Could not create user", "Dismiss", { duration: 2000 });
       return;
     }    
     let response : any = await this.usersService.save(processedFormData);
@@ -88,14 +85,13 @@ export class UserFormComponent implements OnInit {
         case 409 :
           errorMessage = "User already exists";
           break;
+        case 424 :
+          errorMessage = "Could not send confirmation email";
+          break;
       }
-      this.snackBar.open(errorMessage, "Dismiss", {
-        duration: 2000,
-      });
+      this.snackBar.open(errorMessage, "Dismiss", { duration: 2000 });
     } else {
-      this.snackBar.open("Successfully created user", "Dismiss", {
-        duration: 2000,
-      });
+      this.snackBar.open("Successfully created user", "Dismiss", { duration: 2000 });
       this.router.navigateByUrl('/users');
     }
   }

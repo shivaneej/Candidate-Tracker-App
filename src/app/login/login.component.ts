@@ -3,7 +3,6 @@ import { Validators, FormBuilder, FormGroupDirective } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { config } from 'process';
 
 @Component({
   selector: 'app-login',
@@ -53,9 +52,7 @@ export class LoginComponent implements OnInit {
           errorMessage = "Account disabled";
           break;
       }
-      this.snackBar.open(errorMessage, "Dismiss", {
-        duration: 2000,
-      });
+      this.snackBar.open(errorMessage, "Dismiss", { duration: 2000 });
     } else {
       let returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/';
       this.router.navigateByUrl(returnUrl);

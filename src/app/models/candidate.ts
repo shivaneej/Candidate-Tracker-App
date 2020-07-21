@@ -24,7 +24,7 @@ export class Candidate {
         this.ectc = ectc;
         this.ctct = ctct;
         this.contact = contact;
-        this.round = (round === null) ? 0 : round ;
+        this.round = round ;
         this.skills = skills.map(skill => new Skill(skill.skillId, skill.skillName));
     }
 };

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../services/users.service';
-import { SystemUser } from '../models/system-user';
-import { map } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../services/auth.service';
 
@@ -68,17 +66,13 @@ export class EditUserComponent implements OnInit {
           errorMessage = "User does not exist";
           break;
       }
-      this.snackbar.open(errorMessage, "Dismiss", {
-        duration: 2000,
-      });
+      this.snackbar.open(errorMessage, "Dismiss", { duration: 2000 });
     } else {
       if(!this.subordinateProfile) {
         let newUser = response.body;
         this.authService.updateUser(newUser);
       }
-      this.snackbar.open("Successfully updated", "Dismiss", {
-        duration: 2000,
-      });
+      this.snackbar.open("Successfully updated", "Dismiss", { duration: 2000 });
 
       //get logged in id and redirect
       let currentUser = this.authService.userLoggedIn();

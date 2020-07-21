@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
 import { PasswordValidators } from './password.validators';
 import { Router } from '@angular/router';
 import { UsersService } from '../services/users.service';
@@ -29,18 +28,12 @@ export class ChangePasswordComponent implements OnInit {
   async changePassword() {
     let response : any = await this.userService.changePassword(this.oldPassword.value, this.newPassword.value);
     if(response.code === 200) {
-      this.snackbar.open("Password changed successfully", "Dismiss", {
-        duration: 2000,
-      });
+      this.snackbar.open("Password changed successfully", "Dismiss", { duration: 2000 });
       this.router.navigateByUrl('/dashboard');
     } else if(response.code === 400) {
-      this.snackbar.open("Old password is incorrect", "Dismiss", {
-        duration: 2000,
-      });
+      this.snackbar.open("Old password is incorrect", "Dismiss", { duration: 2000 });
     } else {
-      this.snackbar.open(response.error, "Dismiss", {
-        duration: 2000,
-      });
+      this.snackbar.open(response.error, "Dismiss", { duration: 2000 });
     }
   }
 

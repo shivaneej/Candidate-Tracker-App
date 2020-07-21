@@ -68,20 +68,14 @@ export class InterviewFormComponent implements OnInit {
   async save() {
     let processedFormData = this.processInterviewData(this.form.value, this.options);
     if(processedFormData === null) {
-      this.snackbar.open("Could not schedule interview", "Dismiss", {
-        duration: 2000,
-      });
+      this.snackbar.open("Could not schedule interview", "Dismiss", { duration: 2000 });
       return;
     }    
     let response : any = await this.interviewService.save(processedFormData);
-    if(response.code !== 200){
-      this.snackbar.open("Something went wrong", "Dismiss", {
-        duration: 2000,
-      });
+    if(response.code === 200){
+      this.snackbar.open("Successfully scheduled interview", "Dismiss", { duration: 2000 });
     } else {
-      this.snackbar.open("Successfully scheduled interview", "Dismiss", {
-        duration: 2000,
-      });
+      this.snackbar.open("Something went wrong", "Dismiss", { duration: 2000 });
     }
     this.router.navigateByUrl('/dashboard');
   }
