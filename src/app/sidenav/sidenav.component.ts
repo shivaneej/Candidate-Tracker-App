@@ -4,6 +4,8 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { navItemsList } from './nav-items';
 import { MatSidenav } from '@angular/material/sidenav';
+import { ConnectorService } from '../services/connector.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -25,7 +27,8 @@ export class SidenavComponent implements OnDestroy {
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, 
-    private authService : AuthService, private router : Router ) { 
+    private authService : AuthService, private router : Router, 
+    private connectorService : ConnectorService, private snackbar : MatSnackBar ) { 
 
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -34,6 +37,11 @@ export class SidenavComponent implements OnDestroy {
     this.authService.authStateChanged.subscribe((user) => {
       this.user = user;
     });
+
+    this.connectorService.errorEvent.subscribe((result) => {
+      this.logout();
+      this.snackbar.open("Session expired", "Dismiss", { duration: 2000 }); 
+    })
   }
 
   ngOnDestroy(): void {

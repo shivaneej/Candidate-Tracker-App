@@ -31,6 +31,7 @@ export class InterviewCardComponent implements OnInit {
   candidate;
   candidateId;
   interviewer;
+  editButtonPrefix;
   constructor(public dialog: MatDialog, private snackbar : MatSnackBar, private interviewService : InterviewService) { }
 
   openDialog(value : number) {
@@ -53,6 +54,7 @@ export class InterviewCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.editButtonPrefix = (this.interview.feedback) ? 'Edit' : 'Give';
     this.candidate = this.interview.candidate.firstName + " " + this.interview.candidate.lastName;
     this.candidateId = this.interview.candidate.id;
     this.interviewer = this.interview.interviewer.firstName + " " + this.interview.interviewer.lastName;

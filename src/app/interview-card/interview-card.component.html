@@ -34,7 +34,6 @@
               <td>{{ endTime }}</td>
             </tr>
           </table>
-          <!-- <button (click)="openDialog(3)" mat-stroked-button color="accent">View Candidate</button> -->
           
         <span class="stats-value">
           <mat-icon>insert_invitation</mat-icon>
@@ -46,7 +45,7 @@
       <div class="button-group">
         <button (click)="accept()" *ngIf="showAction == 2" mat-stroked-button color="primary">Accept</button>
         <button (click)="openDialog(1)" *ngIf="showAction == 2" mat-stroked-button color="accent">Reschedule</button>
-        <button (click)="openDialog(2)" *ngIf="showAction == 1" mat-stroked-button color="primary">Give Feedback</button>
+        <button (click)="openDialog(2)" *ngIf="showAction == 1" mat-stroked-button color="primary">{{ editButtonPrefix }} Feedback</button>
         <button [style.visibility]="'hidden'"  mat-stroked-button *ngIf="showAction == 0">Hidden</button>
       </div>
     </mat-card-actions>

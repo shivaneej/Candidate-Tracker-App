@@ -23,7 +23,7 @@
                 <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
                 <mat-datepicker #endPicker (opened)="dateSelected()"></mat-datepicker>
             </mat-form-field>
-            <mat-error *ngIf = "end.touched && form.invalid && form.errors?.invalidDuration">
+            <mat-error *ngIf = "form.invalid && form.errors?.invalidDuration">
                 Start date should be less than end date
             </mat-error>
         </div>
@@ -31,5 +31,5 @@
 </div>
 <div mat-dialog-actions align="end">
     <button mat-button (click)="clear()">Clear</button>
-    <button mat-button (click)="save()" cdkFocusInitial>OK</button>
+    <button mat-button (click)="save()" [disabled]="form.invalid" cdkFocusInitial>OK</button>
 </div>

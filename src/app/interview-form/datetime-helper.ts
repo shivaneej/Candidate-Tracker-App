@@ -16,6 +16,7 @@ export class DateTimeHelper {
     }
 
     static convertDatetoISO(date : Date) {
+        if(!date) return null;
         let dateObj = new Date(date);
         var isoDateTime = new Date(dateObj.getTime() - (dateObj.getTimezoneOffset() * 60000)).toISOString();
         return isoDateTime.split('T')[0];

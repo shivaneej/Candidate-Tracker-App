@@ -31,21 +31,18 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataLoading = true;
-    setTimeout(() => {
-      this.usersService.getAll().pipe(
-        map((users : any) => {
-          return users.map((user) => {
-              let name = user.firstName + " " + user.lastName;
-              let role = user.role.roleString;
-              return new SystemUser(user.id, name, user.email, role, user.contact, user.isActive);
-          })
-        }
-      ))
-      .subscribe(users => {
-        this.usersByRole = groupBy(users, ( x: SystemUser ) => x.role);
-        this.dataLoading = false; 
-      });
-    }, 2000);
-    
+    this.usersService.getAll().pipe(
+      map((users : any) => {
+        return users.map((user) => {
+            let name = user.firstName + " " + user.lastName;
+            let role = user.role.roleString;
+            return new SystemUser(user.id, name, user.email, role, user.contact, user.isActive);
+        })
+      }
+    ))
+    .subscribe(users => {
+      this.usersByRole = groupBy(users, ( x: SystemUser ) => x.role);
+      this.dataLoading = false; 
+    });
   }
 }

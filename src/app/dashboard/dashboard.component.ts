@@ -15,6 +15,7 @@ import { FilterComponent } from './filter/filter.component';
 })
 export class DashboardComponent implements OnInit {
 
+  DEFAULT_DURATION = 7;
   dataListCache = [];
   dataToDisplay;
   interviews;
@@ -30,7 +31,16 @@ export class DashboardComponent implements OnInit {
     { title: 'Candidates In Process', color: '#DDBDF1', icon : 'event_note' }
   ];
 
-  filterDuration = {};
+  options = [ 
+    {label : 'Today', value : 1}, 
+    {label : 'Yesterday', value : 2}, 
+    {label : 'Last 7 days', value : 7}, 
+    {label : 'Last 30 days', value : 30}, 
+  ];
+
+  filterDuration : any = {};
+
+  durationString;
   constructor(
     private authService : AuthService, 
     private statsService : StatisticsService,
@@ -38,6 +48,8 @@ export class DashboardComponent implements OnInit {
     public dialog: MatDialog ) { }
 
   ngOnInit(): void {
+    this.filterDuration = { days: this.DEFAULT_DURATION, start : null, end : null};
+    this.updateDuration();
     this.user = this.authService.userLoggedIn();
     this.showStatistics = STATISTICS_PERMISSION.read.includes(this.user.role.roleString);
     this.showInterviews = INTERVIEW_PERMISSION.read.includes(this.user.role.roleString);
@@ -54,14 +66,24 @@ export class DashboardComponent implements OnInit {
   }
 
   openFilterDialog() {
-    let dialogRef = this.dialog.open(FilterComponent, { width: '600px' , data : this.filterDuration });
+    let dialogRef = this.dialog.open(FilterComponent, { width: '600px' , data : 
+    { duration : this.filterDuration, default : this.DEFAULT_DURATION , options : this.options }  });
 
     dialogRef.afterClosed().subscribe(result => {
       if(result?.event === 'Filter')
         this.filterDuration = result.data;
+        this.updateDuration();
     });
   }
 
+  updateDuration() {
+    if(this.filterDuration.days) {
+      this.durationString = this.options.filter(option => option.value === this.filterDuration.days)
+      .map(option => option.label)[0];
+    } else if(this.filterDuration.start) {
+      this.durationString = "From : " +this.filterDuration.start + " to : " + this.filterDuration.end;
+    }
+  }
 
   fetchStatistics(duration) {
     return combineLatest(

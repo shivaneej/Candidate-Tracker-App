@@ -1,6 +1,7 @@
 <mat-card *ngIf="showStatistics">
     <mat-card-header>
         <mat-card-title class="mat-display-1">Statistics</mat-card-title>
+        <mat-card-subtitle class="mat-headline">{{ durationString }}</mat-card-subtitle>
         <div>
             <button mat-raised-button (click)="openFilterDialog()">Duration</button>
             <mat-button-toggle-group #group="matButtonToggleGroup" [(value)]="statsMode">

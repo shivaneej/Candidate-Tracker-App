@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { AuthService } from './services/auth.service';
-import { catchError, filter, take, switchMap } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { catchError } from 'rxjs/operators';
+import { ConnectorService } from './services/connector.service';
 
 @Injectable()
 export class HeaderInterceptor implements HttpInterceptor {
-  constructor (private authService : AuthService, private router : Router, private snackbar : MatSnackBar) {}
+  constructor (private authService : AuthService, private connectorService : ConnectorService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let modifiedReq = this.addAuthenticationToken(request);
@@ -16,11 +15,7 @@ export class HeaderInterceptor implements HttpInterceptor {
       catchError(error => {
         if(error instanceof HttpErrorResponse && error.status === 401) {
           if(!request.url.includes('authenticate')) {
-            this.authService.logout();     
-            this.router.navigateByUrl('/login');    
-            this.snackbar.open("Session expired", "Dismiss", {
-              duration: 2000,
-            }); 
+            this.connectorService.sessionExpired(true); 
           }
           return throwError(error);
         } else

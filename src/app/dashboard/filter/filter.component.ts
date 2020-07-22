@@ -12,12 +12,7 @@ import { DateValidator } from './date.validator';
 export class FilterComponent implements OnInit {
 
   selectedDuration;
-  options = [ 
-    {label : 'Today', value : 1}, 
-    {label : 'Yesterday', value : 2}, 
-    {label : 'Last 7 days', value : 7}, 
-    {label : 'Last 30 days', value : 30}, 
-  ];
+  options = [];
   maxDate;
   form;
 
@@ -31,10 +26,11 @@ export class FilterComponent implements OnInit {
         start : [''],
         end : [''],
       }, { validators: DateValidator.validDuration });
-      this.selectedDuration = data.days || null;
+      this.options = data.options;
+      this.selectedDuration = data.duration.days || null;
       this.form.setValue({
-        start : data.start || '',
-        end : data.end || '',
+        start : data.duration.start || '',
+        end : data.duration.end || '',
       })
   }
 
@@ -61,7 +57,7 @@ export class FilterComponent implements OnInit {
   }
 
   clear() {
-    this.selectedDuration = null;
+    this.selectedDuration = this.data.default;
     this.start.reset();
     this.end.reset();
   }
