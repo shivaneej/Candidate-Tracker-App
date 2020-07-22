@@ -16,8 +16,10 @@ import { FilterComponent } from './filter/filter.component';
 export class DashboardComponent implements OnInit {
 
   DEFAULT_DURATION = 7;
-  dataListCache = [];
-  dataToDisplay;
+  initialValues = { overall : 0, user : 0 };
+  dataToDisplay = {
+    duration: null, hired : this.initialValues, rejected : this.initialValues, offers : this.initialValues, inProcess : this.initialValues
+  };
   interviews;
   objectKeys = Object.keys; 
   user;
@@ -25,10 +27,10 @@ export class DashboardComponent implements OnInit {
   statsMode = 'overall';
   showInterviews;
   cardStyles = [
-    { title: 'Candidates Hired', color: 'lightblue', icon : 'how_to_reg' },
-    { title: 'Candidates Rejected', color: 'lightgreen', icon : 'person_remove' },
-    { title: 'Offers Roled Out', color: 'lightpink', icon : 'send' },
-    { title: 'Candidates In Process', color: '#DDBDF1', icon : 'event_note' }
+    { title: 'Candidates Hired', color: '#ccff90', icon : 'how_to_reg' },
+    { title: 'Candidates Rejected', color: '#f8bbd0', icon : 'person_remove' },
+    { title: 'Offers Roled Out', color: '#b3e5fc', icon : 'send' },
+    { title: 'Candidates In Process', color: '#fff59d', icon : 'event_note' }
   ];
 
   options = [ 
@@ -54,11 +56,7 @@ export class DashboardComponent implements OnInit {
     this.showStatistics = STATISTICS_PERMISSION.read.includes(this.user.role.roleString);
     this.showInterviews = INTERVIEW_PERMISSION.read.includes(this.user.role.roleString);
     if(this.showStatistics)
-      this.fetchStatistics({ days : 7})
-      .subscribe(data => {
-        this.dataListCache.push(data);
-        this.dataToDisplay = this.dataListCache[0];
-      });
+      this.fetchStatistics(this.filterDuration);
     if(this.showInterviews)
       this.interviewService.getAll().subscribe(interviews => {
         this.interviews = interviews;
@@ -73,6 +71,7 @@ export class DashboardComponent implements OnInit {
       if(result?.event === 'Filter')
         this.filterDuration = result.data;
         this.updateDuration();
+        this.fetchStatistics(this.filterDuration);
     });
   }
 
@@ -86,21 +85,21 @@ export class DashboardComponent implements OnInit {
   }
 
   fetchStatistics(duration) {
-    return combineLatest(
-      this.statsService.getCandidatesHired(duration),
-      this.statsService.getCandidatesRejected(duration),
-      this.statsService.getOffersRoledOut(duration),
-      this.statsService.getCandidatesInProcess(duration),
+    combineLatest(
+      this.statsService.getOverallStats(duration),
+      this.statsService.getMyStats(duration),
     ).pipe(
-      map(([numHired, numRejected, numOffers, numInProcess]) => {
+      map(([overall, user]) => {
         return {
           duration : duration.days !== null ? duration.days : { from : duration.start , to : duration.end},
-          hired : numHired,
-          rejected : numRejected,
-          offers : numOffers,
-          inProcess : numInProcess
+          hired : { overall : overall.hired, user : user.hired },
+          rejected : { overall : overall.rejected, user : user.rejected },
+          offers : { overall : overall.hired, user : user.hired },
+          inProcess : { overall : overall.ready + overall.hold, user : user.ready + user.hold }
         }
       })
-    );
+    ).subscribe(data => {
+      this.dataToDisplay = data;
+    });
   }
 }
