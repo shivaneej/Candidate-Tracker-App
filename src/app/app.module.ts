@@ -25,16 +25,17 @@ import { InterviewCardComponent } from './interview-card/interview-card.componen
 import { RescheduleComponent } from './interview-form/reschedule/reschedule.component';
 import { FeedbackComponent } from './feedback/feedback.component';
 import { FilterComponent } from './dashboard/filter/filter.component';
+import { SkillsChipListComponent } from './skills-chip-list/skills-chip-list.component';
 
 import { AuthGuard } from './services/guards/auth-guard.service';
 import { ViewUserGuard } from './services/guards/view-user-guard.service';
-import { EditUserGuard } from './services/guards/edit-user-guard.service';
+import { CreateUserGuard } from './services/guards/create-user-guard.service';
 import { ViewCandidateGuard } from './services/guards/view-candidate-guard.service';
 import { EditCandidateGuard } from './services/guards/edit-candidate-guard.service';
 import { ViewCandidateProfileGuard } from './services/guards/view-candidate-profile-guard.service';
 import { CreateCandidateGuard } from './services/guards/create-candidate-guard.service';
 import { CreateInterviewGuard } from './services/guards/create-interview-guard.service';
-import { SkillsChipListComponent } from './skills-chip-list/skills-chip-list.component';
+import { EditUserGuard } from './services/guards/edit-user-guard.service';
 
 
 
@@ -72,8 +73,8 @@ import { SkillsChipListComponent } from './skills-chip-list/skills-chip-list.com
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
       { path: 'login', component: LoginComponent },
       { path: 'users', component: UsersComponent, canActivate: [AuthGuard, ViewUserGuard] },
-      { path: 'users/new', component: UserFormComponent, canActivate: [AuthGuard, EditUserGuard] },
-      { path: 'users/:id', component: EditUserComponent, canActivate: [AuthGuard] },
+      { path: 'users/new', component: UserFormComponent, canActivate: [AuthGuard, CreateUserGuard] },
+      { path: 'users/:id', component: EditUserComponent, canActivate: [AuthGuard, EditUserGuard] },
       { path: 'candidates', component: CandidatesComponent, canActivate: [AuthGuard, ViewCandidateGuard] },
       { path: 'candidates/new', component: CandidateFormComponent, canActivate: [AuthGuard, CreateCandidateGuard] },
       { path: 'candidates/:id', component: CandidateProfileComponent, canActivate: [AuthGuard, ViewCandidateProfileGuard] },

@@ -5,8 +5,8 @@
         <div>
             <button mat-raised-button (click)="openFilterDialog()">Duration</button>
             <mat-button-toggle-group #group="matButtonToggleGroup" [(value)]="statsMode">
-                <mat-button-toggle value="overall"> Overall </mat-button-toggle>
                 <mat-button-toggle value="user"> My Stats </mat-button-toggle>
+                <mat-button-toggle value="overall"> Overall </mat-button-toggle>
             </mat-button-toggle-group>
         </div>
     </mat-card-header>

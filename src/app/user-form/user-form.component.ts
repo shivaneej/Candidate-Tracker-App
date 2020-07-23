@@ -72,6 +72,7 @@ export class UserFormComponent implements OnInit {
     let processedFormData = this.processManagerData(this.form.getRawValue(), this.options);
     if(processedFormData === null) {
       this.snackBar.open("Could not create user", "Dismiss", { duration: 2000 });
+      this.responsePending = false;
       return;
     }    
     let response : any = await this.usersService.save(processedFormData);

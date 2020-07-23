@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
   objectKeys = Object.keys; 
   user;
   showStatistics;
-  statsMode = 'overall';
+  statsMode = 'user';
   showInterviews;
   cardStyles = CARD_STYLES;
   options = DURATION_OPTIONS;
