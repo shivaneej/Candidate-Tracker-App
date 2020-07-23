@@ -16,15 +16,13 @@ export class CandidatesComponent implements OnInit {
   candidates : Candidate[];
   dataLoading : boolean = false;
   columnHeader = {'name': 'Name', 'email': 'Email', 'round' : 'Round', 'status' : 'Status', 'preferredLoc' : 'Preferred Location'};
+  // Search on the basis of these fields
   fields = {'name': 'Name', 'email': 'Email', 'round' : 'Round', 'preferredLoc' : 'Preferred Location', 'skills' : 'Skills'};
   dropdownOptions = ['Ready', 'Hold', 'Hired', 'Rejected'];
   ddFilterColumn = 'status';
-
   canCreateNewCandidate : boolean;
 
-  constructor(private candidatesService : CandidatesService, private authService : AuthService, private snackbar : MatSnackBar) {
-
-  }
+  constructor(private candidatesService : CandidatesService, private authService : AuthService, private snackbar : MatSnackBar) {}
 
   ngOnInit(): void {
     this.dataLoading = true;
@@ -32,7 +30,6 @@ export class CandidatesComponent implements OnInit {
     this.canCreateNewCandidate = CANDIDATE_PERMISSION.create.includes(currentUser.role.roleString);
     this.candidatesService.getAll().pipe(
       map((candidates : any) => {
-        console.log(candidates);
         return candidates.map(candidate => {
           return new Candidate(candidate.id, candidate.firstName + " " + candidate.lastName, candidate.email,
           candidate.status, candidate.preferredLoc, candidate.address, candidate.ectc, candidate.ctct, 

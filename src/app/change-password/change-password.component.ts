@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.scss']
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangePasswordComponent {
 
   form;
   responsePending;
@@ -40,20 +40,7 @@ export class ChangePasswordComponent implements OnInit {
     }
   }
 
-  get oldPassword(){
-    return this.form.get('oldPassword');
-  }
-
-  get newPassword(){
-    return this.form.get('newPassword');
-  }
-
-  get confirmPassword(){
-    return this.form.get('confirmPassword');
-  }
-
-
-  ngOnInit(): void {
-  }
-
+  get oldPassword() { return this.form.get('oldPassword') }
+  get newPassword() { return this.form.get('newPassword') }
+  get confirmPassword() { return this.form.get('confirmPassword') }
 }

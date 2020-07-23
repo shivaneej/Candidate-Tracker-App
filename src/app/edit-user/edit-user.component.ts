@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../services/auth.service';
 import { ADD_SKILLS } from '../services/guards/permissions';
 import { SkillsChipListComponent } from '../skills-chip-list/skills-chip-list.component';
+import { CONTACT_REGEX_PATTERN } from '../helpers/constants';
 
 @Component({
   selector: 'app-edit-user',
@@ -16,30 +17,19 @@ export class EditUserComponent implements OnInit {
 
   form;
   @ViewChild(SkillsChipListComponent) skillsChipList: SkillsChipListComponent;
-  userData = {
-    firstName : '',
-    lastName : '',
-    contact : '',
-    isActive : '',
-    skills : ''
-  };
+  userData = { firstName : '', lastName : '', contact : '', isActive : '', skills : '' };
   subordinateProfile : boolean = true;
   addSkills : boolean = false;
   selectedSkills: string[] = [];
-
   responsePending : boolean = false;
 
-  constructor(private builder: FormBuilder,
-    private route : ActivatedRoute,
-    private usersService : UsersService,
-    private snackbar : MatSnackBar,
-    private router : Router,
-    private authService : AuthService ) { 
-      let pattern = "^(\\+\\d{1,3}[- ]?)?0?[7-9]{1}\\d{9}$";
+  constructor(private builder: FormBuilder, private snackbar : MatSnackBar,
+    private route : ActivatedRoute, private router : Router,
+    private usersService : UsersService, private authService : AuthService ) { 
       this.form = this.builder.group({
         firstName : ['', Validators.required],
         lastName : ['', Validators.required],
-        contact : ['', [Validators.required, Validators.pattern(pattern)]],
+        contact : ['', [Validators.required, Validators.pattern(CONTACT_REGEX_PATTERN)]],
         isActive : '',
         skills : '' 
       });
@@ -66,8 +56,7 @@ export class EditUserComponent implements OnInit {
     });
   }
 
-  async save() {
-    this.responsePending = true;
+  processForm() {
     let oldData = Object.assign({}, this.userData);
     let updatedData = Object.assign(oldData, this.form.value);
     updatedData.skills = [];
@@ -76,16 +65,18 @@ export class EditUserComponent implements OnInit {
       .map(skill => skill.mapFields());
       updatedData.skills = selectedSkills;
     }
-    updatedData.isActive = (updatedData.isActive === true) ? 1 : 0;  
+    updatedData.isActive = (updatedData.isActive === true) ? 1 : 0; 
+    return updatedData;
+  }
+
+  async save() {
+    this.responsePending = true;
+    let updatedData = this.processForm();
     let response : any = await this.usersService.update(updatedData);
     this.responsePending = false;
     if(response.code !== 200){
       let errorMessage = "Something went wrong";
-      switch(response.code) {
-        case 404 :
-          errorMessage = "User does not exist";
-          break;
-      }
+      if(response.coe === 404) errorMessage = "User does not exist";
       this.snackbar.open(errorMessage, "Dismiss", { duration: 2000 });
     } else {
       if(!this.subordinateProfile) {
@@ -93,7 +84,6 @@ export class EditUserComponent implements OnInit {
         this.authService.updateUser(newUser);
       }
       this.snackbar.open("Successfully updated", "Dismiss", { duration: 2000 });
-
       //get logged in id and redirect
       let currentUser = this.authService.userLoggedIn();
       if(currentUser.id === updatedData.id) // Editing own's profile
@@ -103,21 +93,9 @@ export class EditUserComponent implements OnInit {
     } 
   }
 
-
-  get firstName() {
-    return this.form.get('firstName');
-  }
-  get lastName() {
-    return this.form.get('lastName');
-  }
-  get contact() {
-    return this.form.get('contact');
-  }
-  get isActive() {
-    return this.form.get('isActive');
-  }
-  get skills() {
-    return this.form.get('skills');
-  }
-
+  get firstName() { return this.form.get('firstName') }
+  get lastName() { return this.form.get('lastName') }
+  get contact() { return this.form.get('contact') }
+  get isActive() { return this.form.get('isActive') }
+  get skills() { return this.form.get('skills') }
 }

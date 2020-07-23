@@ -8,6 +8,8 @@ import { InterviewService } from '../services/interview.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterComponent } from './filter/filter.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DEFAULT_DURATION } from '../helpers/constants';
+import { DURATION_OPTIONS, CARD_STYLES } from './variables';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,11 +18,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class DashboardComponent implements OnInit {
 
-  DEFAULT_DURATION = 7;
   initialValues = { overall : 0, user : 0 };
-  dataToDisplay = {
-    duration: null, hired : this.initialValues, rejected : this.initialValues, offers : this.initialValues, inProcess : this.initialValues
-  };
+  dataToDisplay = { duration: null, hired : this.initialValues, rejected : this.initialValues, 
+    offers : this.initialValues, inProcess : this.initialValues };
   interviews;
   dataLoading : boolean = false;
   objectKeys = Object.keys; 
@@ -28,23 +28,11 @@ export class DashboardComponent implements OnInit {
   showStatistics;
   statsMode = 'overall';
   showInterviews;
-  cardStyles = [
-    { title: 'Candidates Hired', color: '#ccff90', icon : 'how_to_reg' },
-    { title: 'Candidates Rejected', color: '#f8bbd0', icon : 'person_remove' },
-    { title: 'Offers Roled Out', color: '#b3e5fc', icon : 'send' },
-    { title: 'Candidates In Process', color: '#fff59d', icon : 'event_note' }
-  ];
-
-  options = [ 
-    {label : 'Today', value : 1}, 
-    {label : 'Yesterday', value : 2}, 
-    {label : 'Last 7 days', value : 7}, 
-    {label : 'Last 30 days', value : 30}, 
-  ];
-
+  cardStyles = CARD_STYLES;
+  options = DURATION_OPTIONS;
   filterDuration : any = {};
-
   durationString;
+
   constructor(
     private authService : AuthService, 
     private statsService : StatisticsService,
@@ -52,9 +40,10 @@ export class DashboardComponent implements OnInit {
     public dialog: MatDialog, private snackbar : MatSnackBar ) { }
 
   ngOnInit(): void {
-    this.filterDuration = { days: this.DEFAULT_DURATION, start : null, end : null};
+    this.filterDuration = { days: DEFAULT_DURATION, start : null, end : null};
     this.dataLoading = true;
     this.updateDuration();
+    
     this.user = this.authService.userLoggedIn();
     this.showStatistics = STATISTICS_PERMISSION.read.includes(this.user.role.roleString);
     this.showInterviews = INTERVIEW_PERMISSION.read.includes(this.user.role.roleString);
@@ -72,7 +61,7 @@ export class DashboardComponent implements OnInit {
 
   openFilterDialog() {
     let dialogRef = this.dialog.open(FilterComponent, { width: '600px' , data : 
-    { duration : this.filterDuration, default : this.DEFAULT_DURATION , options : this.options }  });
+    { duration : this.filterDuration, default : DEFAULT_DURATION , options : this.options }  });
 
     dialogRef.afterClosed().subscribe(result => {
       if(result?.event === 'Filter')

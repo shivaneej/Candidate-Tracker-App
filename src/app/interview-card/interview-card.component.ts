@@ -6,6 +6,7 @@ import { FeedbackComponent } from '../feedback/feedback.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { InterviewService } from '../services/interview.service';
 import { CandidateProfileComponent } from '../candidate-profile/candidate-profile.component';
+import { splitDateTime } from '../helpers/date-helper';
 
 enum Footer {
   None,
@@ -44,7 +45,6 @@ export class InterviewCardComponent implements OnInit {
     else if(value === 3)
       dialogRef = this.dialog.open(CandidateProfileComponent, { width : '1000px', height:'500px', data : this.candidateId });
     
-
     dialogRef.afterClosed().subscribe(result => {
       if(result?.event == 'Feedback'){
         this.saveFeedback(result.data);
@@ -59,7 +59,7 @@ export class InterviewCardComponent implements OnInit {
     this.candidate = this.interview.candidate.firstName + " " + this.interview.candidate.lastName;
     this.candidateId = this.interview.candidate.id;
     this.interviewer = this.interview.interviewer.firstName + " " + this.interview.interviewer.lastName;
-    this.updateDate();
+    [this.date, this.startTime, this.endTime] = splitDateTime(this.interview.startTime, this.interview.endTime);
     let otherUser = (this.currentUser === 'Interviewer') ? 'Recruiter' : 'Interviewer';
 
     let status = this.interview.approvalStatus as string;
@@ -116,6 +116,8 @@ export class InterviewCardComponent implements OnInit {
     if(formData !== null) {
       this.responsePending = true;
       let response : any = await this.interviewService.updateInterview(formData, 1);
+      console.log(formData);
+      console.log(response);
       this.responsePending = false;
       if(response.code !== 200) {
         this.snackbar.open("Could not reschedule the interview", "Dismiss", { duration: 2000 });
@@ -123,7 +125,7 @@ export class InterviewCardComponent implements OnInit {
         this.snackbar.open("Successfully rescheduled the interview", "Dismiss", { duration: 2000 });
         this.interview = response.body;
         this.setStatusAsPending();
-        this.updateDate();
+        [this.date, this.startTime, this.endTime] = splitDateTime(this.interview.startTime, this.interview.endTime);
       }
     }
   }

@@ -21,15 +21,13 @@ export class CandidateProfileComponent implements OnInit {
   columnHeader;
   dataLoading : boolean = false;
   responsePending : boolean = false;
-
-
   canScheduleInterview : boolean;
-
   candidateId;
+
   constructor(private route: ActivatedRoute, private router : Router,
-    private authService : AuthService,
-    private candidateProfileService : CandidateProfileService, private snackBar : MatSnackBar, 
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any, @Optional() public dialogRef: MatDialogRef<CandidateProfileComponent>,){
+    private authService : AuthService, private candidateProfileService : CandidateProfileService, 
+    private snackBar : MatSnackBar, 
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any, @Optional() public dialogRef: MatDialogRef<CandidateProfileComponent>){
   }
 
   ngOnInit(): void {
@@ -59,11 +57,7 @@ export class CandidateProfileComponent implements OnInit {
     if(response.code === 200){
       this.snackBar.open("Candidate Hired", "Dismiss", { duration : 2000 });
       this.status = 'hired';
-    } else if(response.code === 404) {
-      this.snackBar.open("Cannot find candidate", "Dismiss", { duration : 2000 });
-    } else {
-      this.snackBar.open("Something went wrong", "Dismiss", { duration : 2000 });
-    }
+    } else this.handleErrors(response);
   }
 
   async rejectCandidate(){
@@ -73,27 +67,28 @@ export class CandidateProfileComponent implements OnInit {
     if(response.code === 200){
       this.snackBar.open("Candidate Rejected", "Dismiss", { duration : 2000 });
       this.status = 'rejected';
-    } else if(response.code === 404) {
-      this.snackBar.open("Cannot find candidate", "Dismiss", { duration : 2000 });
-    } else{
-      this.snackBar.open("Something went wrong", "Dismiss", { duration : 2000 });
-    }
+    } else this.handleErrors(response);
   }
 
   async downloadCV(){
     this.responsePending = true;
     let response : any = await this.candidateProfileService.downloadCV(this.candidateId);
     this.responsePending = false;
-    if(response.code === 200){
+    if(response.code === 200)
       saveAs(response.cvFile, (this.candidate?.firstName || '') + "_CV");
-    } else if(response.code === 404){
-      this.snackBar.open("CV not found", "Dismiss", { duration : 2000 });
-    } else if(response.code === 415){
+    else if(response.code === 404)
+      this.snackBar.open("Cannot find CV", "Dismiss", { duration : 2000 });
+    else if(response.code === 415)
       this.snackBar.open("Cannot read CV", "Dismiss", { duration : 2000 });
-    } else{
+    else
+      this.snackBar.open("Something went wrong", "Dismiss", { duration : 2000 });  
+  }
+
+  handleErrors(response) {
+    if(response.code === 404) 
+      this.snackBar.open("Cannot find candidate", "Dismiss", { duration : 2000 });
+    else 
       this.snackBar.open("Something went wrong", "Dismiss", { duration : 2000 });
-    }
-    
   }
 
   closeDialog(){
