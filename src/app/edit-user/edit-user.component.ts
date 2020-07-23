@@ -27,6 +27,8 @@ export class EditUserComponent implements OnInit {
   addSkills : boolean = false;
   selectedSkills: string[] = [];
 
+  responsePending : boolean = false;
+
   constructor(private builder: FormBuilder,
     private route : ActivatedRoute,
     private usersService : UsersService,
@@ -65,6 +67,7 @@ export class EditUserComponent implements OnInit {
   }
 
   async save() {
+    this.responsePending = true;
     let oldData = Object.assign({}, this.userData);
     let updatedData = Object.assign(oldData, this.form.value);
     updatedData.skills = [];
@@ -74,8 +77,8 @@ export class EditUserComponent implements OnInit {
       updatedData.skills = selectedSkills;
     }
     updatedData.isActive = (updatedData.isActive === true) ? 1 : 0;  
-    console.log(updatedData);
     let response : any = await this.usersService.update(updatedData);
+    this.responsePending = false;
     if(response.code !== 200){
       let errorMessage = "Something went wrong";
       switch(response.code) {

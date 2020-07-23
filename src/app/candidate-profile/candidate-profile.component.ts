@@ -20,6 +20,8 @@ export class CandidateProfileComponent implements OnInit {
   interviews;
   columnHeader;
   dataLoading : boolean = false;
+  responsePending : boolean = false;
+
 
   canScheduleInterview : boolean;
 
@@ -44,11 +46,16 @@ export class CandidateProfileComponent implements OnInit {
       this.interviews = this.candidate.interviews;
       this.columnHeader = {roundNum : 'Round', startTime : 'Start Time', endTime : 'End Time', feedback : 'Feedback'};
       this.dataLoading = false;
+    }, err => {
+      this.dataLoading = false;
+      this.snackBar.open("Could not fetch candidate data", "Dismiss", { duration : 2000 });
     });
   }
 
   async hireCandidate(){
-    let response : any = await this.candidateProfileService.hireCandidate(this.candidateId)
+    this.responsePending = true;
+    let response : any = await this.candidateProfileService.hireCandidate(this.candidateId);
+    this.responsePending = false;
     if(response.code === 200){
       this.snackBar.open("Candidate Hired", "Dismiss", { duration : 2000 });
       this.status = 'hired';
@@ -60,7 +67,9 @@ export class CandidateProfileComponent implements OnInit {
   }
 
   async rejectCandidate(){
-    let response : any = await this.candidateProfileService.rejectCandidate(this.candidateId)
+    this.responsePending = true;
+    let response : any = await this.candidateProfileService.rejectCandidate(this.candidateId);
+    this.responsePending = false;
     if(response.code === 200){
       this.snackBar.open("Candidate Rejected", "Dismiss", { duration : 2000 });
       this.status = 'rejected';
@@ -72,9 +81,11 @@ export class CandidateProfileComponent implements OnInit {
   }
 
   async downloadCV(){
-    let response : any = await this.candidateProfileService.downloadCV(this.candidateId)
+    this.responsePending = true;
+    let response : any = await this.candidateProfileService.downloadCV(this.candidateId);
+    this.responsePending = false;
     if(response.code === 200){
-      saveAs(response.cvFile, this.candidate.firstName + "_CV");
+      saveAs(response.cvFile, (this.candidate?.firstName || '') + "_CV");
     } else if(response.code === 404){
       this.snackBar.open("CV not found", "Dismiss", { duration : 2000 });
     } else if(response.code === 415){

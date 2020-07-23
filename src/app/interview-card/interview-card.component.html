@@ -41,6 +41,7 @@
       </div>
     </mat-card-content>
     <mat-divider></mat-divider>
+    <mat-progress-bar *ngIf="responsePending" mode="query" color="accent"></mat-progress-bar>
     <mat-card-actions>
       <div class="button-group">
         <button (click)="accept()" *ngIf="showAction == 2" mat-stroked-button color="primary">Accept</button>

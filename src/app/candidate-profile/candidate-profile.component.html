@@ -1,6 +1,6 @@
 <mat-spinner color="accent" *ngIf="dataLoading"></mat-spinner>
 <a routerLink=''></a> <!-- Prevent scrollbar in dialog to automatically scroll to the bottom -->
-<div *ngIf="dataLoading == false">
+<div *ngIf="dataLoading == false && candidate">
     <mat-card class="profile-header" [ngStyle]="{ 'background-color' : (status === 'hired') ? '#8BC34A' : ((status === 'rejected' ? '#F44336' : '#FFC107')) }">
         <mat-card-title>
             <h2>
@@ -29,7 +29,7 @@
             </div>
         </div>
     </mat-card>
-    
+    <mat-progress-bar *ngIf="responsePending" mode="query" color="accent"></mat-progress-bar>
     <mat-divider></mat-divider>
     
     

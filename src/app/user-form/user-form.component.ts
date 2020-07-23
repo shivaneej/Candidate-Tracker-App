@@ -24,6 +24,7 @@ export class UserFormComponent implements OnInit {
   options: any[] = [];
   filteredOptions: Observable<string[]>;
   allRoles : Role[] = [] ;
+  responsePending : boolean = false;
   constructor( private builder: FormBuilder, 
     private usersService : UsersService,
     private router : Router, 
@@ -73,12 +74,14 @@ export class UserFormComponent implements OnInit {
   }
 
   async save() {
+    this.responsePending = true;
     let processedFormData = this.processManagerData(this.form.getRawValue(), this.options);
     if(processedFormData === null) {
       this.snackBar.open("Could not create user", "Dismiss", { duration: 2000 });
       return;
     }    
     let response : any = await this.usersService.save(processedFormData);
+    this.responsePending = false;
     if(response.code !== 200){
       let errorMessage = "Something went wrong";
       switch(response.code) {

@@ -4,6 +4,7 @@ import { Candidate } from '../models/candidate';
 import { map } from 'rxjs/operators';
 import { CANDIDATE_PERMISSION } from '../services/guards/permissions';
 import { AuthService } from '../services/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-candidates',
@@ -21,7 +22,7 @@ export class CandidatesComponent implements OnInit {
 
   canCreateNewCandidate : boolean;
 
-  constructor(private candidatesService : CandidatesService, private authService : AuthService) {
+  constructor(private candidatesService : CandidatesService, private authService : AuthService, private snackbar : MatSnackBar) {
 
   }
 
@@ -41,6 +42,9 @@ export class CandidatesComponent implements OnInit {
     ).subscribe((candidates) =>{
       this.candidates = candidates;
       this.dataLoading = false;
+    }, err => {
+      this.dataLoading = false;
+      this.snackbar.open("Could not fetch candidates", "Dismiss", { duration : 2000 }); 
     });
   }
 }

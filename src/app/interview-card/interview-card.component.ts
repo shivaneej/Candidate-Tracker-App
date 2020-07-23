@@ -32,6 +32,7 @@ export class InterviewCardComponent implements OnInit {
   candidateId;
   interviewer;
   editButtonPrefix;
+  responsePending : boolean = false;
   constructor(public dialog: MatDialog, private snackbar : MatSnackBar, private interviewService : InterviewService) { }
 
   openDialog(value : number) {
@@ -99,7 +100,9 @@ export class InterviewCardComponent implements OnInit {
 
   async saveFeedback(formData) {
     if(formData !== null) {
+      this.responsePending = true;
       let response : any = await this.interviewService.updateInterview(formData, 2);
+      this.responsePending = false;
       if(response.code !== 200) {
         this.snackbar.open("Could not update feedback", "Dismiss", { duration: 2000 });
       } else {
@@ -111,7 +114,9 @@ export class InterviewCardComponent implements OnInit {
 
   async reschedule(formData) {
     if(formData !== null) {
+      this.responsePending = true;
       let response : any = await this.interviewService.updateInterview(formData, 1);
+      this.responsePending = false;
       if(response.code !== 200) {
         this.snackbar.open("Could not reschedule the interview", "Dismiss", { duration: 2000 });
       } else {
@@ -124,7 +129,9 @@ export class InterviewCardComponent implements OnInit {
   }
 
   async accept() {
+    this.responsePending = true;
     let response : any = await this.interviewService.accept(this.interview.interviewId);
+    this.responsePending = false;
     if(response.code !== 200) {
       this.snackbar.open("Could not accept interview", "Dismiss", { duration: 2000 });
     } else {

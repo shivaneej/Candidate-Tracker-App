@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { InterviewService } from '../services/interview.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterComponent } from './filter/filter.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,7 @@ export class DashboardComponent implements OnInit {
     duration: null, hired : this.initialValues, rejected : this.initialValues, offers : this.initialValues, inProcess : this.initialValues
   };
   interviews;
+  dataLoading : boolean = false;
   objectKeys = Object.keys; 
   user;
   showStatistics;
@@ -47,10 +49,11 @@ export class DashboardComponent implements OnInit {
     private authService : AuthService, 
     private statsService : StatisticsService,
     private interviewService : InterviewService, 
-    public dialog: MatDialog ) { }
+    public dialog: MatDialog, private snackbar : MatSnackBar ) { }
 
   ngOnInit(): void {
     this.filterDuration = { days: this.DEFAULT_DURATION, start : null, end : null};
+    this.dataLoading = true;
     this.updateDuration();
     this.user = this.authService.userLoggedIn();
     this.showStatistics = STATISTICS_PERMISSION.read.includes(this.user.role.roleString);
@@ -60,6 +63,10 @@ export class DashboardComponent implements OnInit {
     if(this.showInterviews)
       this.interviewService.getAll().subscribe(interviews => {
         this.interviews = interviews;
+        this.dataLoading = false;
+      }, err => {
+        this.dataLoading = false;
+        this.snackbar.open("Could not fetch data", "Dismiss", { duration: 2000 }); 
       });
   }
 

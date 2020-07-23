@@ -81,7 +81,7 @@ import { SkillsChipListComponent } from './skills-chip-list/skills-chip-list.com
       { path: 'interviews/new', component: InterviewFormComponent, canActivate: [AuthGuard, CreateInterviewGuard] },
       { path: 'profile/edit', component: EditUserComponent, canActivate: [AuthGuard] },
       { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
-      { path: '**', component: LoginComponent } // change to 404 
+      { path: '**', component: DashboardComponent } // change to 404 
     ]),
   ],
   providers: [{

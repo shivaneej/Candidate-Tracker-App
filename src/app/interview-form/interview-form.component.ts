@@ -22,6 +22,7 @@ export class InterviewFormComponent implements OnInit {
   candidate;
   options: any[] = [];
   filteredOptions: Observable<string[]>;
+  responsePending : boolean  = false;
   constructor(
     private builder: FormBuilder,
     private interviewService : InterviewService,
@@ -66,18 +67,21 @@ export class InterviewFormComponent implements OnInit {
   }
 
   async save() {
+    this.responsePending = true;
     let processedFormData = this.processInterviewData(this.form.value, this.options);
     if(processedFormData === null) {
       this.snackbar.open("Could not schedule interview", "Dismiss", { duration: 2000 });
+      this.responsePending = false;
       return;
     }    
     let response : any = await this.interviewService.save(processedFormData);
+    this.responsePending = false;
     if(response.code === 200){
       this.snackbar.open("Successfully scheduled interview", "Dismiss", { duration: 2000 });
+      this.router.navigateByUrl('/dashboard');
     } else {
-      this.snackbar.open("Something went wrong", "Dismiss", { duration: 2000 });
+      this.snackbar.open("Culd not schedule interview", "Dismiss", { duration: 2000 });
     }
-    this.router.navigateByUrl('/dashboard');
   }
 
   processInterviewData(formData, options) {

@@ -24,7 +24,8 @@
             <skills-chip-list *ngIf="addSkills" [control]="skills" [selected]="selectedSkills"></skills-chip-list>
 
             <mat-slide-toggle formControlName="isActive" class="toggle-left" *ngIf="subordinateProfile">User active</mat-slide-toggle>
-            <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid" class="full-width-button">Save</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!form.valid || responsePending" class="full-width-button">Save</button>
+            <mat-spinner diameter="20" *ngIf="responsePending" color="accent"></mat-spinner>
         </form>
     </mat-card-content>
 </mat-card>

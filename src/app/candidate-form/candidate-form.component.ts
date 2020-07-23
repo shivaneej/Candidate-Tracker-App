@@ -26,6 +26,8 @@ export class CandidateFormComponent implements OnInit {
   candidateId;
   candidateData;
 
+  responsePending : boolean = false;
+
   constructor(private builder: FormBuilder, 
     private candidatesService : CandidatesService,
     private router : Router,
@@ -93,8 +95,13 @@ export class CandidateFormComponent implements OnInit {
   }
 
   async save() {
-    let selectedSkills = (this.skillsChipList.allSkills.filter(skill => this.skillsChipList.selectedSkills.includes(skill.name)))
-    .map(skill => skill.mapFields());
+    this.responsePending = true;
+    let selectedSkills;
+    if(this.skillsChipList.allSkills) {
+      selectedSkills = (this.skillsChipList.allSkills.filter(skill => 
+        this.skillsChipList.selectedSkills.includes(skill.name))
+      ).map(skill => skill.mapFields());
+    }
     let processedFormData = Object.assign({}, this.form.value);
     processedFormData.skillSet = selectedSkills;
     delete processedFormData.skills;
@@ -102,14 +109,13 @@ export class CandidateFormComponent implements OnInit {
     let response : any;
     if(this.candidateId === null) {
       processedFormData.recruiter = { id : this.authService.userLoggedIn().id };
-      console.log(processedFormData);
       response = await this.candidatesService.saveOrUpdateCandidate(processedFormData, this.selectedFile, true);
     } else {
       let updateBody = Object.assign({}, this.candidateData);
       Object.assign(updateBody, processedFormData);
-      console.log(updateBody);
       response = await this.candidatesService.saveOrUpdateCandidate(updateBody, this.selectedFile, false);
     }
+    this.responsePending = false;
     if(response.code !== 200){
       let errorMessage = "Something went wrong";
       switch(response.code) {
