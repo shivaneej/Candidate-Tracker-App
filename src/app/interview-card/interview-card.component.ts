@@ -116,8 +116,6 @@ export class InterviewCardComponent implements OnInit {
     if(formData !== null) {
       this.responsePending = true;
       let response : any = await this.interviewService.updateInterview(formData, 1);
-      console.log(formData);
-      console.log(response);
       this.responsePending = false;
       if(response.code !== 200) {
         this.snackbar.open("Could not reschedule the interview", "Dismiss", { duration: 2000 });

@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { TimeValidator } from '../time.validator';
-import { DateTimeHelper } from '../datetime-helper';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { convertToSQLDateTime, splitDateTime } from 'src/app/helpers/date-helper';
 
 @Component({
   selector: 'reschedule',
@@ -24,13 +24,7 @@ export class RescheduleComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private builder: FormBuilder ) { 
       this.interview = {...data};
-
-      let dateObject = new Date(this.interview.startTime);
-      this.ogDate = dateObject.toDateString();
-      this.ogStartTime = dateObject.toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
-      this.ogEndTime = new Date(this.interview.endTime).toLocaleString('en-US', { hour: '2-digit', minute: 'numeric', hour12: true });
-
-
+      [this.ogDate, this.ogStartTime, this.ogEndTime] = splitDateTime(this.interview.startTime, this.interview.endTime);
 
       this.form = builder.group({
         date : [new Date(this.ogDate), [Validators.required]],
@@ -46,8 +40,7 @@ export class RescheduleComponent {
 
   filter = (d: Date | null): boolean => {
     const day = (d || new Date()).getDay();
-    // Prevent Saturday and Sunday from being selected.
-    return day !== 0 && day !== 6;
+    return day !== 0 && day !== 6; // Prevent Saturday and Sunday from being selected.
   }
 
   save() {
@@ -61,8 +54,8 @@ export class RescheduleComponent {
 
   processInterviewData(formData) {
     let processedFormData = Object.assign( this.interview , formData);
-    processedFormData.startTime = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.startTime);
-    processedFormData.endTime = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.endTime);
+    processedFormData.startTime = convertToSQLDateTime(processedFormData.date, processedFormData.startTime);
+    processedFormData.endTime = convertToSQLDateTime(processedFormData.date, processedFormData.endTime);
     delete processedFormData.date;
     return processedFormData;
   }
@@ -71,15 +64,7 @@ export class RescheduleComponent {
     this.dialogRef.close({event: 'Cancel'});
   }
 
-
-  get date() {
-    return this.form.get('date');
-  }
-  get startTime() {
-    return this.form.get('startTime');
-  }
-  get endTime() {
-    return this.form.get('endTime');
-  }
-
+  get date() { return this.form.get('date') }
+  get startTime() { return this.form.get('startTime') }
+  get endTime() { return this.form.get('endTime') }
 }

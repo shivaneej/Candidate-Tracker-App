@@ -7,7 +7,7 @@ import { startWith, map } from 'rxjs/operators';
 import { InterviewService } from '../services/interview.service';
 import { UsersService } from '../services/users.service';
 import { TimeValidator } from './time.validator';
-import { DateTimeHelper } from './datetime-helper';
+import { convertToSQLDateTime } from '../helpers/date-helper';
 
 @Component({
   selector: 'app-interview-form',
@@ -24,12 +24,9 @@ export class InterviewFormComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   responsePending : boolean  = false;
   constructor(
-    private builder: FormBuilder,
-    private interviewService : InterviewService,
-    private usersService : UsersService, 
-    private router : Router,
-    private route : ActivatedRoute,
-    private snackbar : MatSnackBar ) {
+    private builder: FormBuilder, private snackbar : MatSnackBar,
+    private interviewService : InterviewService, private usersService : UsersService, 
+    private router : Router, private route : ActivatedRoute ) {
     this.form = builder.group({
       interviewer : ['', [Validators.required, Validators.email]],
       date : ['', [Validators.required]],
@@ -49,16 +46,15 @@ export class InterviewFormComponent implements OnInit {
 
   filter = (d: Date | null): boolean => {
     const day = (d || new Date()).getDay();
-    // Prevent Saturday and Sunday from being selected.
-    return day !== 0 && day !== 6;
+    return day !== 0 && day !== 6; // Prevent Saturday and Sunday from being selected.
   }
 
   ngOnInit(): void {
     this.filteredOptions = this.interviewer.valueChanges
-      .pipe(
-        startWith(''),
-        map((value : string) => this._filter(value)),
-      );
+    .pipe(
+      startWith(''),
+      map((value : string) => this._filter(value)),
+    );
   }
 
   private _filter(value: string): string[] {
@@ -80,7 +76,7 @@ export class InterviewFormComponent implements OnInit {
       this.snackbar.open("Successfully scheduled interview", "Dismiss", { duration: 2000 });
       this.router.navigateByUrl('/dashboard');
     } else {
-      this.snackbar.open("Culd not schedule interview", "Dismiss", { duration: 2000 });
+      this.snackbar.open("Could not schedule interview", "Dismiss", { duration: 2000 });
     }
   }
 
@@ -91,23 +87,14 @@ export class InterviewFormComponent implements OnInit {
     if(!interviewer[0]) return null;
     let processedFormData = Object.assign({ candidate : { id : parseInt(this.candidate, 10) }}, formData);
     processedFormData.interviewer = { id : interviewer[0].id } ;
-    processedFormData.startTime = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.startTime);
-    processedFormData.endTime = DateTimeHelper.convertToDateTime(processedFormData.date, processedFormData.endTime);
+    processedFormData.startTime = convertToSQLDateTime(processedFormData.date, processedFormData.startTime);
+    processedFormData.endTime = convertToSQLDateTime(processedFormData.date, processedFormData.endTime);
     delete processedFormData.date;
     return processedFormData;
   }
 
-  get interviewer() {
-    return this.form.get('interviewer');
-  }
-  get date() {
-    return this.form.get('date');
-  }
-  get startTime() {
-    return this.form.get('startTime');
-  }
-  get endTime() {
-    return this.form.get('endTime');
-  }
-
+  get interviewer() { return this.form.get('interviewer') }
+  get date() { return this.form.get('date') }
+  get startTime() { return this.form.get('startTime') }
+  get endTime() { return this.form.get('endTime') }
 }

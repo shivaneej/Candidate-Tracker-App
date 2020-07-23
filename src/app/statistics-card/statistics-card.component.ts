@@ -5,7 +5,7 @@ import { Component, OnInit, Input } from '@angular/core';
   templateUrl: './statistics-card.component.html',
   styleUrls: ['./statistics-card.component.scss']
 })
-export class StatisticsCardComponent implements OnInit {
+export class StatisticsCardComponent {
 
   @Input('stats') stats;
   @Input('title') title;
@@ -13,9 +13,4 @@ export class StatisticsCardComponent implements OnInit {
   @Input('icon') icon;
   @Input('statsMode') statsMode;
   constructor() { }
-
-  ngOnInit(): void {
-
-  }
-
 }

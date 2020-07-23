@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SystemUser } from '../models/system-user';
 import { UsersService } from '../services/users.service';
-import { map, catchError } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import groupBy from '../helper';
 import { RoleService } from '../services/role.service';
 import { AuthService } from '../services/auth.service';
