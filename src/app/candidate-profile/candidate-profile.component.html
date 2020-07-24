@@ -20,10 +20,10 @@
                 <a mat-raised-button color="accent" *ngIf="status === 'ready' && canScheduleInterview" routerLink="/interviews/new" [queryParams]="{candidate: candidateId}" class="button-right angular-button" appearance="outline"> 
                     Schedule Interview
                 </a>
-                <a mat-raised-button color="accent" class="button-right angular-button" appearance="outline" (click)="hireCandidate()"> 
+                <a mat-raised-button color="accent" *ngIf="status === 'ready'" class="button-right angular-button" appearance="outline" (click)="hireCandidate()"> 
                     Hire Candidate
                 </a>
-                <a mat-raised-button color="accent" class="button-right angular-button" appearance="outline" (click)="rejectCandidate()">
+                <a mat-raised-button color="accent" *ngIf="status === 'ready'" class="button-right angular-button" appearance="outline" (click)="rejectCandidate()">
                     Reject Candidate
                 </a>
             </div>
