@@ -23,6 +23,11 @@ export class UsersService extends DataService{
     return this.http.get(url);
   }
 
+  getManagers(id) {
+    let url = 'http://localhost:8080/users/managers/' + id;
+    return this.http.get(url);
+  }
+
   changePassword(oldPassword, newPassword) {
     return new Promise((resolve, reject) => {
       // POST request to server with email and password
